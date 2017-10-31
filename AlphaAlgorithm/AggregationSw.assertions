@@ -1,0 +1,36 @@
+//move_BOUND = 2
+/*test_Movement_av = 0
+	aggregation_Movement_MB = 0
+	test_Movement_alpha = 0
+	Movement_av = 0
+	Movement_alpha = 0
+	random() = 0 	 
+	test_aggregation_Movement_MB = 0
+	Movement_lv = 0
+	test_aggregation_Movement_lv = 0
+	nametype ID = {0,1}
+	floor(x) = 0
+	test_Communication_id = 0
+	nametype nat = {0..2} 
+	aggregation_Movement_alpha = 0
+	test_Movement_MB = 0
+	aggregation_Movement_av = 0
+	nametype real = {0,1}
+	test_Communication_RC = 0
+	test_aggregation_Movement_alpha = 0  
+	Movement_MB = 0 
+	nametype int = { -2..2}
+	Communication_RC = 0
+	Communication_id = 0
+	test_aggregation_Movement_av = 0
+	nametype boolean = Bool
+	test_Movement_lv = 0
+	nametype ID = {0,1}
+	aggregation_Movement_lv = 0*/
+csp Instantiation csp-begin
+   
+csp-end
+  
+assertion AggregationSoftware terminates (a1)
+assertion AggregationSoftware is timelock-free (a2)
+	 

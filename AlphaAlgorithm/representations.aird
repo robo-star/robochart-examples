@@ -13,6 +13,7 @@
     <semanticResources>platform:/plugin/circus.robocalc.library/robochart/relation_toolkit.rct</semanticResources>
     <semanticResources>platform:/plugin/circus.robocalc.library/robochart/function_toolkit.rct</semanticResources>
     <semanticResources>platform:/plugin/circus.robocalc.library/robochart/set_toolkit.rct</semanticResources>
+    <semanticResources>AggregationSw2.rct</semanticResources>
     <ownedViews xmi:type="viewpoint:DView" xmi:id="__Wa7UJKrEeaY5oxJB-QFwA">
       <viewpoint xmi:type="description:Viewpoint" href="platform:/plugin/circus.robocalc.graphical.robochart/description/robochart.odesign#//@ownedViewpoints[name='RoboChartID']"/>
       <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" xmi:id="_upPtoPjYEeac6bht0VHmXQ" name="aggregation" repPath="#_upSJ4PjYEeac6bht0VHmXQ">

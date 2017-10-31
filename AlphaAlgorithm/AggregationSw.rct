@@ -1,5 +1,3 @@
-
-
 import aggregation::*
 
 type ID
