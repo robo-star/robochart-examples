@@ -1,0 +1,62 @@
+
+
+import set_toolkit::*
+import sequence_toolkit::*
+import aggregation::*
+interface CommHw {
+	event broadcast : ID
+	event receive : ID * ID
+}
+interface Internal {
+	event robots : nat
+}
+stm Communication {
+	uses CommHw
+	uses Internal
+	const id : ID
+	var x : ID * ID , y : ID
+	var neighs : Set( ID )
+	const RC : nat
+	clock RCC
+	initial i1
+	state Broadcast {
+		
+	entry send broadcast ! id
+	}
+	state Receive {
+	}
+	transition t1 {
+		from i1 
+		to Broadcast
+	}
+	transition t2 {
+		from Receive
+		to Receive
+		trigger receive ? x
+		condition x [ 1 ] == id
+		action neighs = union ( neighs , { x [ 2 ] } )
+	}
+	transition t3 {
+		from Receive
+		to Receive
+	trigger broadcast ? y
+		action 
+	send receive ! (| y , id |)
+	}
+
+	transition t4 {
+		from Broadcast
+		to Receive
+		trigger # RCC
+		action neighs = { }
+	}
+
+	transition t5 {
+		from Receive
+		to Broadcast
+		trigger
+		condition since ( RCC ) >= RC
+		action 
+	send robots ! size ( neighs )
+	}
+}
