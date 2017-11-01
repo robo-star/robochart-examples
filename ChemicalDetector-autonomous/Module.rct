@@ -1,0 +1,35 @@
+ 
+import Chemical::*
+import Location::*
+
+module ChemicalDetector {
+	robotic platform Vehicle {		
+		event flag
+		provides Operations event gas : Seq( GasSensor )
+		event obstacle : Loc
+		event odometer : real
+	}
+	cref ctrl_ref0 = MicroController
+	cref ctrl_ref1 = MainController
+	connection Vehicle on gas to ctrl_ref1 on gas (_async)
+	connection ctrl_ref1 on turn to ctrl_ref0 on turn  (_async)
+	connection ctrl_ref1 on stop to ctrl_ref0 on stop connection Vehicle on obstacle to ctrl_ref0 on obstacle (_async)
+	connection ctrl_ref0 on flag to Vehicle on flag  (_async)
+	
+	
+connection Vehicle on odometer to ctrl_ref0 on odometer ( _async )
+	
+	connection ctrl_ref1 on resume to ctrl_ref0 on resume
+}
+
+interface Operations {
+	move(   lv : real , a : Angle)
+	randomWalk()
+shortRandomWalk()
+}
+operation move( lv : real , a : Angle) {
+	terminates
+}
+operation shortRandomWalk() {
+	terminates
+}

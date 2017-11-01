@@ -1,0 +1,36 @@
+package Location
+import Chemical::*
+enumeration Loc { left right front  }
+
+operation changeDirection( l : Loc) {
+	initial i0
+	state From {
+	}
+	final j0
+	transition t1 {
+		from From
+		to j0
+	trigger
+		condition l == Loc::left
+		action move( lv , Angle::Right)
+	}
+	transition t2 {
+		from i0
+		to From
+	}
+	transition t3 {
+		from From
+		to j0
+	trigger
+		condition l == Loc::right
+		action move( lv , Angle::Left)
+	}
+	transition t4 {
+		from From
+		to j0
+	trigger
+		condition l == Loc::front
+		action move( lv , Angle::Back)
+	}
+	requires Operations const lv : real
+}

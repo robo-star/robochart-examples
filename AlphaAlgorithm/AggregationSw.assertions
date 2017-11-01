@@ -1,36 +1,61 @@
-//move_BOUND = 2
-/*test_Movement_av = 0
-	aggregation_Movement_MB = 0
-	test_Movement_alpha = 0
-	Movement_av = 0
-	Movement_alpha = 0
-	random() = 0 	 
-	test_aggregation_Movement_MB = 0
-	Movement_lv = 0
-	test_aggregation_Movement_lv = 0
-	nametype ID = {0,1}
-	floor(x) = 0
-	test_Communication_id = 0
-	nametype nat = {0..2} 
-	aggregation_Movement_alpha = 0
-	test_Movement_MB = 0
-	aggregation_Movement_av = 0
-	nametype real = {0,1}
-	test_Communication_RC = 0
-	test_aggregation_Movement_alpha = 0  
-	Movement_MB = 0 
-	nametype int = { -2..2}
-	Communication_RC = 0
-	Communication_id = 0
-	test_aggregation_Movement_av = 0
-	nametype boolean = Bool
-	test_Movement_lv = 0
-	nametype ID = {0,1}
-	aggregation_Movement_lv = 0*/
-csp Instantiation csp-begin
-   
+csp Instantiations csp-begin
+nametype nat = {0..4}
+aggregation_Movement_alpha = 2
+move_BOUND = 2
+nametype string = LSeq(Char,2)
+aggregation_Movement_av = 1
+aggregation_Movement_MB = 1
+nametype real = {0,1}
+nametype int = { -4..4}
+Communication_RC = 1
+Communication_id = 0
+random() = 0
+nametype boolean = Bool
+nametype ID = {0,1}
+floor(x) = x 
+aggregation_Movement_lv = 1   
 csp-end
-  
-assertion AggregationSoftware terminates (a1)
-assertion AggregationSoftware is timelock-free (a2)
-	 
+
+import aggregation::*
+
+assertion Communication is not deterministic (a1)
+assertion Communication is divergence-free (a2)
+assertion Communication is deadlock-free (a3)
+
+assertion Movement is not deterministic (a4)
+assertion Movement is divergence-free (a5)
+assertion Movement is deadlock-free (a6)
+
+assertion AggregationSoftware is not deterministic (a7)
+assertion AggregationSoftware is divergence-free (a8)
+assertion AggregationSoftware is deadlock-free (a9)
+
+
+csp Spec1 csp-begin
+Spec1 = let
+Responds = (|~|x:ID @ receive.(Communication_id,x) -> Responds) |~| SKIP
+Run = broadcast?x:diff(ID,{Communication_id}) -> receive!(x,Communication_id) -> Run |~| SKIP
+Main = broadcast.Communication_id -> (Responds|||Run); Main
+within
+Main
+csp-end
+
+csp Impl1 csp-begin
+Impl1 = AggregationSoftware_O\diff(Events,{|receive,broadcast|})
+csp-end
+
+assertion Impl1 refines Spec1 (b1)
+
+csp Spec2 csp-begin
+Spec2 = let
+Moves = moveCall -> moveRet -> (Moves |~| SKIP)
+Run = |~|x:Position @ obstacle.x -> Moves; Run
+within
+Moves; Run
+csp-end 
+
+csp Impl2 csp-begin
+Impl2 = AggregationSoftware_O\diff(Events,{|moveCall,moveRet,obstacle|})
+csp-end
+
+assertion Impl2 refines Spec2 (b2)

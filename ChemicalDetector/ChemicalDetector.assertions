@@ -1,0 +1,53 @@
+csp Instantiations csp-begin
+nametype real = { -90..180}
+nametype nat = {0..2}
+Signalling_flagTime = 0
+nametype boolean = Bool
+nametype string = LSeq(Char,2)
+nametype int = { -2..2}
+incr_BOUND = 2
+decr_BOUND = 2
+csp-end
+
+assertion Detecting is not deterministic (a1)
+
+csp OnlyCommands csp-begin
+OnlyCommands = ChemicalDetectorSoftware_O [|{|gas,light|}|] STOP
+csp-end
+
+assertion OnlyCommands is deadlock-free (a2)
+
+csp OnlyGasAndLight csp-begin
+OnlyGasAndLight = ChemicalDetectorSoftware_O [|{|cd|}|] STOP
+csp-end
+
+assertion OnlyGasAndLight is deadlock-free (a3)
+
+csp Spec1 csp-begin
+Commands = cd?x -> (|~|e: {|turn,incrCall,decrCall|} @ e -> Commands)
+Init = light.green -> SKIP ||| gas -> SKIP
+GasLight = let
+  T = (
+    gas -> SKIP
+    |||
+    (
+      light.red -> siren -> flag -> SKIP
+      |~|
+      light.green -> SKIP
+      |~|
+      light.amber -> SKIP
+    )
+  ); T
+within
+  Init; T
+Spec1 = Commands ||| GasLight
+csp-end
+
+csp Impl1 csp-begin
+Impl1 = ChemicalDetectorSoftware_O\{|incrRet,decrRet|}
+csp-end
+
+assertion Impl1 refines Spec1 (a4)
+
+assertion ChemicalDetectorSoftware is deadlock-free (a5)
+assertion ChemicalDetectorSoftware is divergence-free (a6)

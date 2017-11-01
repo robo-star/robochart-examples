@@ -1,0 +1,93 @@
+assertion GasAnalysis is deterministic (a1)
+assertion GasAnalysis is divergence-free (a2)
+assertion GasAnalysis terminates (a3)
+
+assertion Movement is divergence-free (a4)
+assertion Movement terminates (a5)
+
+assertion ChemicalDetector terminates (a6)
+
+csp Spec1 csp-begin
+Spec1 = GasAnalysis_gas?x -> (|~|e:{|GasAnalysis_resume, GasAnalysis_stop, GasAnalysis_turn|} @ e->Spec1)
+        |~|
+        SKIP
+csp-end
+
+csp Impl1 csp-begin
+Impl1 = GasAnalysis_O\{|GasAnalysis_terminate|}
+csp-end
+
+assertion Impl1 refines Spec1 (a7)
+
+csp Spec2 csp-begin
+Spec2 = let
+Init = randomWalkCall -> randomWalkRet -> SKIP |~| randomWalkCall -> SKIP |~| SKIP
+Reaction = |~|e:{|moveCall, moveRet, randomWalkCall, randomWalkRet, Movement_flag, Movement_obstacle, Movement_odometer|} @ e->(Reaction|~|SKIP)
+T = (SKIP |~| (|~|e:{|Movement_resume, Movement_turn,Movement_stop|} @ e->SKIP); Reaction; T)
+within
+Init ||| T
+csp-end
+
+assertion Movement does not refine Spec2 (a8)
+
+csp NoGasNoTermination csp-begin
+NoGas = gas.<(0,0)> -> NoGas
+NoGasNoTermination = ChemicalDetector_O [| {|gas|} |] NoGas
+csp-end
+
+assertion NoGasNoTermination is deadlock-free (a9)  
+
+// every state is reachable
+assertion Movement::Waiting is reachable in ChemicalDetector (a10)
+assertion Movement::Going is reachable in ChemicalDetector (a11)
+assertion Movement::Found is reachable in ChemicalDetector (a12)
+assertion Movement::Avoiding is reachable in ChemicalDetector (a13)
+assertion Movement::TryingAgain is reachable in ChemicalDetector (a14)
+assertion Movement::AvoidingAgain is reachable in ChemicalDetector (a15)
+assertion Movement::GettingOut is reachable in ChemicalDetector (a16)
+
+assertion GasAnalysis::NoGas is reachable in ChemicalDetector (a17)
+assertion GasAnalysis::Analysis is reachable in ChemicalDetector (a18)
+assertion GasAnalysis::GasDetected is reachable in ChemicalDetector (a19)
+assertion GasAnalysis::Reading is reachable in ChemicalDetector (a20)
+
+csp Instantiations csp-begin
+
+intensity(gs) = let 
+aux(<>,max) = max
+aux(<g>^gs,max) = if GasSensor_i(g) > max then aux(gs,GasSensor_i(g)) else aux(gs,max)
+within
+aux(gs,0)
+
+goreq(x,y) = x >= y
+
+angle(x) = if (x > 0) then Right else Front
+
+location(gs) = let
+aux(<>,max,n) = Front
+aux(<g>^gs,max,n) = if GasSensor_i(g) == max then angle(n) else aux(gs,max,n+1)
+within
+aux(gs,intensity(gs),0)
+
+analysis(<>) = noGas
+analysis(<g>^gs) = if (analysis(gs) == noGas and GasSensor_c(g) == 0) then noGas else gasD
+
+GasAnalysis_thr = 1
+nametype nat = {0..2}
+Movement_evadeTime = 0
+Movement_outPeriod = 0
+shortRandomWalk_BOUND = 2
+move_BOUND = 2
+nametype string = LSeq(Char,2)
+nametype Intensity = {0,1}
+nametype real = {0,1}
+nametype Chem = {0,1}
+nametype int = { -2..2}
+Location_changeDirection_lv = 0
+Movement_lv = 0
+Movement_stuckDist = 0
+nametype boolean = Bool
+srw_BOUND = 2
+Movement_stuckPeriod = 0
+card(A) = 0
+csp-end

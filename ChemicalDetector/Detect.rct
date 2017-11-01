@@ -1,0 +1,41 @@
+stm Detecting {
+	event gas
+	initial i1
+	state CleanAir {
+	}
+	state GasPresent {
+	}
+	transition t1 {
+		from i1
+		to CleanAir
+	}
+	transition t2 {
+		from CleanAir
+		to GasPresent
+		trigger gas
+	}
+event detect : Chemical
+	transition t3 {
+		from GasPresent
+		to CleanAir
+		trigger
+		action detect . Chemical::innocuous
+	}
+	transition t4 {
+		from GasPresent
+		to CleanAir
+		trigger
+		action detect . Chemical::anomaly
+	}
+	transition t5 {
+		from GasPresent
+		to CleanAir
+		trigger action { 2 }> detect . Chemical::danger <{ 1 }
+	}
+}
+
+label statement {0}> skip <{0} incontext Detecting
+label statement skip <{0} ; skip <{0} incontext Detecting
+label statement (skip; skip) <{0} incontext Detecting
+label statement {0}>skip ; {2}>skip incontext Detecting
+label statement skip ; {0}> (skip; skip) incontext Detecting

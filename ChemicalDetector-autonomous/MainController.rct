@@ -1,0 +1,18 @@
+controller MainController {
+	
+
+	
+	event turn : Angle
+	event stop
+	
+event gas : Seq( GasSensor )
+	event resume
+sref stm_ref0 = GasAnalysis
+	connection MainController on gas to stm_ref0 on gas
+	connection stm_ref0 on turn to MainController on turn
+	connection stm_ref0 on stop to MainController on stop
+	connection stm_ref0 on resume to MainController on resume
+}
+
+import Chemical::*
+import Location::*

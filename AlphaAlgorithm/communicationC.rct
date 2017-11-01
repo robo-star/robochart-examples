@@ -6,4 +6,4 @@ controller CommunicationC {
 	connection stm_ref0 on receive to CommunicationC on receive [ mult ]
 	connection stm_ref0 on broadcast to CommunicationC on broadcast 
 [ mult ]
-}
+} 

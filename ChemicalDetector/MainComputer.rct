@@ -1,0 +1,14 @@
+controller MainComputer {
+	event gas
+	event turn : real
+	event command : Command
+	
+event detect : Chemical
+sref stm_ref0 = Moving
+sref stm_ref1 = Detecting
+connection MainComputer on gas to stm_ref1 on gas
+	connection MainComputer on detect to stm_ref1 on detect
+	connection MainComputer on turn to stm_ref0 on turn
+	connection MainComputer on command to stm_ref0 on cd
+requires Speed
+}

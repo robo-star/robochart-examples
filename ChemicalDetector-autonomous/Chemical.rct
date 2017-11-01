@@ -1,0 +1,35 @@
+package
+Chemical
+
+enumeration Status {  noGas gasD } import sequence_toolkit::*
+enumeration Angle { Left Right Back Front }
+datatype GasSensor {
+	c : Chem
+	i : Intensity
+}
+type Chem
+type Intensity
+
+//Analyze whether there is gas or not
+function analysis( gs : Seq( GasSensor )) : Status {
+}
+function goreq(  i1 : Intensity , i2 : Intensity) : boolean {
+}
+
+//Return the highest intensity
+function intensity( gs : Seq( GasSensor )) : Intensity {
+	precondition size ( gs ) > 0
+	postcondition forall x : nat | 0 <= x /\ x <= size ( gs ) @ goreq ( result ,
+	gs [ x ] . i )
+	postcondition exists y: nat | 0 <= y /\ x <= size (gs) @ result == gs[x].i
+}
+function location( gs : Seq( GasSensor )) : Angle {
+	precondition size ( gs ) > 0
+	postcondition exists x : nat | 0 <= x /\ x <= size ( gs ) @ gs [ x ] . i ==
+	intensity ( gs ) /\ result == angle ( x )
+}
+function angle( x : nat) : Angle { 
+}
+
+function card(A:Set(?X)): nat {
+}

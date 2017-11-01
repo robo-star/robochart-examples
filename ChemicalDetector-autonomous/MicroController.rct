@@ -1,0 +1,35 @@
+import Chemical::*
+
+controller MicroController {
+	
+	
+	event turn : Angle
+	
+	event obstacle : Loc
+	event flag
+	event stop
+	
+	event resume
+	event odometer : real
+	requires Operations
+sref stm_ref0 = Movement
+	
+	
+	
+	
+	
+	
+connection MicroController on turn to stm_ref0 on turn
+	
+	connection MicroController on obstacle to stm_ref0 on obstacle
+	
+	connection stm_ref0 on flag to MicroController on flag
+	
+	connection MicroController on resume to stm_ref0 on resume
+	
+	connection stm_ref0 on stop to MicroController on stop
+	
+	connection MicroController on odometer to stm_ref0 on odometer
+opref op_ref0 = changeDirection
+}
+import Location::*
