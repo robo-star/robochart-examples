@@ -15,7 +15,7 @@ stm Communication {
 	var x : ID * ID , y : ID
 	var neighs : Set( ID )
 	const RC : nat
-	clock RCC 
+	clock RCC  
 	initial i1
 	state Broadcast {
 		
