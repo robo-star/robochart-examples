@@ -68,7 +68,7 @@ csp-end
 
 assertion Impl2 refines Spec2 (b2) [F] untimed
 
-csp TimedSpec1 csp-begin
+csp timed TimedSpec1 csp-begin
 Timed(OneStep) {
 TimedSpec1 = let
 	Responds = (|~|x:ID @ EDeadline(receive.(Communication_id,x),0) ; Responds) |~| SKIP
@@ -79,11 +79,11 @@ within
 }
 csp-end
 
-csp TimedImpl1 csp-begin
+csp timed TimedImpl1 csp-begin
 TimedImpl1 = timed_priority(timed::AggregationSoftware|\{|moveCall,moveRet,obstacle|})
 csp-end
 
-csp TimedSpec2 csp-begin
+csp timed TimedSpec2 csp-begin
 TimedSpec2 = let
 	Moves = EDeadline(moveCall,0) ; EDeadline(moveRet,0) ; (Moves |~| SKIP)
 	Run = |~|x:Position @ obstacle.x -> Moves; Run
@@ -91,14 +91,14 @@ within
 	Moves; Run
 csp-end
 
-csp TimedImpl2 csp-begin
+csp timed TimedImpl2 csp-begin
 TimedImpl2 = timed_priority(timed::AggregationSoftware|\{|moveCall,moveRet,obstacle|})
 csp-end
 
 assertion TimedImpl1 refines TimedSpec1 (Timed_B1) [F] timed
 assertion TimedImpl2 refines TimedSpec2 (Timed_B2) [F] timed
 
-csp AuxiliaryDefinitions csp-begin
+csp timed AuxiliaryDefinitions csp-begin
 
 -- Auxiliary definitions
 -- This should allow any other events (including tock) up to 'd' time units to elapse, and
@@ -131,23 +131,23 @@ EnterExactly(t) =
 
 csp-end
 
-csp T_AggregationSoftware_Communication_VS csp-begin
+csp timed T_AggregationSoftware_Communication_VS csp-begin
 T_AggregationSoftware_Communication_VS = ShowV_Communication(timed::AggregationSoftware_VS)
 csp-end
 
-csp TB1 csp-begin
+csp timed TB1 csp-begin
 TB1 = CommunicationStateSpent(Communication_RC,"Communication_Receive")
 csp-end
 
-csp TB2 csp-begin
+csp timed TB2 csp-begin
 TB2 = EnterExactly(Communication_RC)
 csp-end
 
-csp TB3 csp-begin
+csp timed TB3 csp-begin
 TB3 = CommunicationStateSpent(0,"Communication_Broadcast")
 csp-end
 
-csp TB4 csp-begin
+csp timed TB4 csp-begin
 NoEvent = AnyOther({|broadcast.Communication_id|}) ; BroadcastHappened(0)
 
 BroadcastHappened(t) = (t < Communication_RC & (broadcast ?x-> SomeHappened(t) 
@@ -165,7 +165,7 @@ SomeHappened(t) = t < Communication_RC & (AnyOther({tock}) ; SomeHappened(t+1))
 TB4 = CHAOS({|moveCall,moveRet,obstacle,tock|}) [| {tock} |] NoEvent
 csp-end
 
-csp TB5 csp-begin
+csp timed TB5 csp-begin
 Timed(OneStep) {
 -- Requirement TB.5
 EveryMBEnterTurning =
@@ -178,11 +178,11 @@ EveryMBEnterTurning =
 TB5 = EveryMBEnterTurning
 csp-end
 
-csp T_AggregationSoftware_Movement_VS csp-begin
+csp timed T_AggregationSoftware_Movement_VS csp-begin
 T_AggregationSoftware_Movement_VS = ShowV_Movement(timed::AggregationSoftware_VS)
 csp-end
 
-csp TB6 csp-begin
+csp timed TB6 csp-begin
 MovementStateSpent(t,x) =
 	let
 		Main = AnyOther({|Movement_enterV.x|}) ; ADeadline({|Movement_exitV.x|},t) ; Main
@@ -192,11 +192,11 @@ MovementStateSpent(t,x) =
 TB6 = MovementStateSpent(Movement_MB,"Movement_MovementAndAvoidance")
 csp-end
 
-csp TB7 csp-begin
+csp timed TB7 csp-begin
 TB7 = MovementStateSpent(360/Movement_av,"Movement_MovementAndAvoidance_Avoid")
 csp-end
 
-csp TB8 csp-begin
+csp timed TB8 csp-begin
 TB8 = MovementStateSpent(360/Movement_av,"Movement_Turning")
 csp-end
 
