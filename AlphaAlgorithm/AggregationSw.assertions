@@ -95,8 +95,8 @@ csp TimedImpl2 csp-begin
 TimedImpl2 = timed_priority(timed::AggregationSoftware|\{|moveCall,moveRet,obstacle|})
 csp-end
 
-assertion TimedImpl1 refines TimedSpec1 (Timed_b1) [F] timed
-assertion TimedImpl2 refines TimedSpec2 (Timed_b1) [F] timed
+assertion TimedImpl1 refines TimedSpec1 (Timed_B1) [F] timed
+assertion TimedImpl2 refines TimedSpec2 (Timed_B2) [F] timed
 
 csp AuxiliaryDefinitions csp-begin
 
@@ -133,6 +133,10 @@ csp-end
 
 csp T_AggregationSoftware_Communication_VS csp-begin
 T_AggregationSoftware_Communication_VS = ShowV_Communication(timed::AggregationSoftware_VS)
+csp-end
+
+csp TB1 csp-begin
+TB1 = CommunicationStateSpent(Communication_RC,"Communication_Receive")
 csp-end
 
 csp TB2 csp-begin
