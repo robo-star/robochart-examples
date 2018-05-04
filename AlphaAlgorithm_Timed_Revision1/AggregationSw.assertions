@@ -26,12 +26,16 @@ csp-end
 
 import aggregation::*
 
-assertion Communication is deterministic (a1)
+/* Because timed transitions are not deterministic in the timed model the following is
+ * expected to be not deterministic in the untimed model, but deterministic in the timed
+ * model */
+assertion Communication is not deterministic (a1) untimed
+assertion Communication is deterministic (a1_timed) timed
 assertion Communication is divergence-free (a2)
 
 /* Not deadlock free in this model because all transitions have timed conditions, and
  * as such they are not guaranteed to be available in the untimed CSP model. However
- * it should be deadlock free in the timed model. /
+ * it should be deadlock free in the timed model. */
 assertion Communication is not deadlock-free (a3) untimed
 assertion Communication is deadlock-free (a3_timed) timed
 
@@ -48,7 +52,8 @@ assertion Movement is not deadlock-free (a6) untimed
 assertion Movement is deadlock-free (a6_timed) timed
 
 /* See above for determinism */
-assertion AggregationSoftware is not deterministic (a7)
+assertion AggregationSoftware is not deterministic (a7) untimed
+assertion AggregationSoftware is deterministic (a7_timed) timed
 assertion AggregationSoftware is divergence-free (a8)
 
 /* Not deadlock free in this model for the same reason as above */
@@ -93,7 +98,7 @@ csp timed TimedSpec1 csp-begin
 Timed(OneStep) {
 TimedSpec1 = let
 	Responds = (|~|x:ID @ EDeadline(receive.(Communication_id,x),0) ; Responds) |~| SKIP
-	Run = broadcast?x:diff(ID,{Communication_id}) -> receive!(x,Communication_id) -> Run |~| SKIP
+	Run = broadcast?x:diff(ID,{Communication_id}) -> EDeadline(receive.(x,Communication_id),0) ; Run |~| SKIP
 	Main = broadcast.Communication_id -> (Responds|||Run); Main
 within
 	Main
@@ -122,6 +127,41 @@ csp-end
 
 assertion TimedImpl1 refines TimedSpec1 (Timed_B1) [F] timed
 assertion TimedImpl2 refines TimedSpec2 (Timed_B2) [F] timed
+
+/******************************************************************************
+ * TA Requirements.
+ ******************************************************************************/
+
+assertion Movement is timelock-free (Timed_TA1_M)
+
+/* Not timelock free because of deadlines! */
+assertion Communication is not timelock-free (Timed_TA1_C)
+assertion Aggregation is not timelock-free (Timed_TA1_A)
+
+/* Instead can define different processes that hide those events. */
+csp timed T_Communication_WithoutDeadlines csp-begin
+TA_ExternalEvents_Communication_WithoutDeadlines = {|Communication_robots|}
+
+T_Communication_WithoutDeadlines = timed::Communication |\ union(TA_ExternalEvents_Communication_WithoutDeadlines,{tock})
+csp-end
+
+csp timed T_A1_C csp-begin
+T_A1_C = RUN({tock}) ||| CHAOS(TA_ExternalEvents_Communication_WithoutDeadlines)
+csp-end
+
+assertion T_Communication_WithoutDeadlines refines T_A1_C (Timed_TA1_C_NoDeadlines) timed
+
+csp timed T_AggregationSoftware_WithoutDeadlines csp-begin
+TA_ExternalEvents_AggregationSoftware_WithoutDeadlines = {|obstacle|}
+
+T_AggregationSoftware_WithoutDeadlines = timed::AggregationSoftware |\ union(TA_ExternalEvents_AggregationSoftware_WithoutDeadlines,{tock})
+csp-end
+
+csp timed T_A1_A csp-begin
+T_A1_A = RUN({tock}) ||| CHAOS(TA_ExternalEvents_AggregationSoftware_WithoutDeadlines)
+csp-end
+
+assertion T_AggregationSoftware_WithoutDeadlines refines T_A1_A (Timed_TA1_A_NoDeadlines) timed
 
 csp timed AuxiliaryDefinitions csp-begin
 
