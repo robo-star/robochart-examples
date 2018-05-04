@@ -45,7 +45,7 @@ assertion Movement is divergence-free (a5)
 
 /* Not deadlock free in this model for the same reason as above */
 assertion Movement is not deadlock-free (a6) untimed
-assertion Movement is deadlock-free (a6) timed
+assertion Movement is deadlock-free (a6_timed) timed
 
 /* See above for determinism */
 assertion AggregationSoftware is not deterministic (a7)
@@ -87,7 +87,7 @@ Impl2 = AggregationSoftware_O\diff(Events,{|moveCall,moveRet,obstacle|})
 csp-end
 
 /* Similarly to the reason for the above, this does not refine */
-assertion Impl2 does not refines Spec2 (b2) [F] untimed
+assertion Impl2 does not refine Spec2 (b2) [F] untimed
 
 csp timed TimedSpec1 csp-begin
 Timed(OneStep) {
