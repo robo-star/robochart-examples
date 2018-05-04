@@ -163,6 +163,21 @@ csp-end
 
 assertion T_AggregationSoftware_WithoutDeadlines refines T_A1_A (Timed_TA1_A_NoDeadlines) timed
 
+/** REACHABILITY **/
+assertion Movement::Turning::Turn180 is reachable (TA_2_Turning_Turn180)
+assertion Movement::Turning::RandomTurn is reachable (TA_2_Turning_RandomTurn)
+assertion Movement::Turning::f1 is reachable (TA_2_Turning_f1)
+assertion Movement::Turning is reachable (TA_2_Turning)
+assertion Movement::MovementAndAvoidance is reachable (TA_2_MovementAndAvoidance)
+assertion Movement::MovementAndAvoidance::Move is reachable (TA_2_MovementAndAvoidance_Move)
+assertion Movement::MovementAndAvoidance::Avoid is reachable (TA_2_MovementAndAvoidance_Avoid)
+assertion Communication::Broadcast is reachable (TA_2_Communication_Broadcast)
+assertion Communication::Receive is reachable (TA_2_Communication_Receive)
+
+/******************************************************************************
+ * TB Requirements.
+ ******************************************************************************/
+
 csp timed AuxiliaryDefinitions csp-begin
 
 -- Auxiliary definitions
