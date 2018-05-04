@@ -174,7 +174,7 @@ Timed(OneStep) {
 -- Requirement TB.5
 EveryMBEnterTurning =
 	let
-		Main = ADeadline({|aggregation_Movement_enterV."Movement_Turning"|},aggregation_Movement_MB) ; Main
+		Main = ADeadline({|aggregation_Movement_enterV."aggregation_Movement_Turning"|},aggregation_Movement_MB) ; Main
 	within
 		timed_priority(Main)
 }
