@@ -1,11 +1,11 @@
 
 csp Instantiations csp-begin
 nametype nat = {0..4}
-aggregation_Movement_alpha = 2
+Movement_alpha = 2
 move_BOUND = 2
 nametype string = LSeq(Char,2)
-aggregation_Movement_av = 1
-aggregation_Movement_MB = 1
+Movement_av = 1
+Movement_MB = 1
 nametype real = {0,1}
 nametype int = { -4..4}
 Communication_RC = 1
@@ -14,7 +14,7 @@ random() = 0
 nametype boolean = Bool
 nametype ID = {0,1}
 floor(x) = x 
-aggregation_Movement_lv = 1   
+Movement_lv = 1   
 
 Plus(e1,e2,T) = if member(e1+e2,T) then e1+e2 else e1
 Div(e1,e2,T) = if member(e1/e2,T) then e1/e2 else e1
@@ -174,7 +174,7 @@ Timed(OneStep) {
 -- Requirement TB.5
 EveryMBEnterTurning =
 	let
-		Main = ADeadline({|aggregation_Movement_enterV."aggregation_Movement_Turning"|},aggregation_Movement_MB) ; Main
+		Main = ADeadline({|aggregation_Movement_enterV."aggregation_Movement_Turning"|},Movement_MB) ; Main
 	within
 		timed_priority(Main)
 }
@@ -194,15 +194,15 @@ MovementStateSpent(t,x) =
 	within
 		timed_priority(Main)
 }
-TB6 = MovementStateSpent(aggregation_Movement_MB,"aggregation_Movement_MovementAndAvoidance")
+TB6 = MovementStateSpent(Movement_MB,"aggregation_Movement_MovementAndAvoidance")
 csp-end
 
 csp timed TB7 csp-begin
-TB7 = MovementStateSpent(360/aggregation_Movement_av,"aggregation_Movement_MovementAndAvoidance_Avoid")
+TB7 = MovementStateSpent(360/Movement_av,"aggregation_Movement_MovementAndAvoidance_Avoid")
 csp-end
 
 csp timed TB8 csp-begin
-TB8 = MovementStateSpent(360/aggregation_Movement_av,"aggregation_Movement_Turning")
+TB8 = MovementStateSpent(360/Movement_av,"aggregation_Movement_Turning")
 csp-end
 
 assertion T_AggregationSoftware_Communication_VS refines TB1 (Timed_TB1) [FD] timed
