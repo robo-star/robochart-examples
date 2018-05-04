@@ -1,0 +1,6 @@
+package
+Mathematics
+function random() : real {
+}
+function floor( x : real) : int {
+}
