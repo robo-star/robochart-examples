@@ -33,14 +33,14 @@ assertion Communication is divergence-free (a2)
  * as such they are not guaranteed to be available in the untimed CSP model. However
  * it should be deadlock free in the timed model. /
 assertion Communication is not deadlock-free (a3) untimed
-assertion Communication is deadlock-free (a3-timed) timed
+assertion Communication is deadlock-free (a3_timed) timed
 
 /* It is deterministic in the timed model as is because an accurate and non-deterministic
  * definition of random() cannot be generated automatically. Because the transitions are
  * otherwhise themselves deterministic the resulting model is deterministic in the timed
- * model */
+ * model */ 
 assertion Movement is not deterministic (a4) untimed
-assertion Movement is deterministic (a4-timed) timed
+assertion Movement is deterministic (a4_timed) timed
 assertion Movement is divergence-free (a5)
 
 /* Not deadlock free in this model for the same reason as above */
@@ -53,7 +53,7 @@ assertion AggregationSoftware is divergence-free (a8)
 
 /* Not deadlock free in this model for the same reason as above */
 assertion AggregationSoftware is not deadlock-free (a9) untimed
-assertion AggregationSoftware is deadlock-free (a9-timed) timed
+assertion AggregationSoftware is deadlock-free (a9_timed) timed
 
 
 csp Spec1 csp-begin
