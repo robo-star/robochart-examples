@@ -174,7 +174,7 @@ Timed(OneStep) {
 -- Requirement TB.5
 EveryMBEnterTurning =
 	let
-		Main = ADeadline({|aggregation_Movement_enterV."aggregation_Movement_Turning"|},Movement_MB) ; Main
+		Main = ADeadline({|Movement_enterV."Movement_Turning"|},Movement_MB) ; Main
 	within
 		timed_priority(Main)
 }
@@ -183,26 +183,26 @@ TB5 = EveryMBEnterTurning
 csp-end
 
 csp timed T_AggregationSoftware_Movement_VS csp-begin
-T_AggregationSoftware_Movement_VS = ShowV_aggregation_Movement(timed::AggregationSoftware_VS)
+T_AggregationSoftware_Movement_VS = ShowV_Movement(timed::AggregationSoftware_VS)
 csp-end
 
 csp timed TB6 csp-begin
 Timed(OneStep) {
 MovementStateSpent(t,x) =
 	let
-		Main = AnyOther({|aggregation_Movement_enterV.x|}) ; ADeadline({|aggregation_Movement_exitV.x|},t) ; Main
+		Main = AnyOther({|Movement_enterV.x|}) ; ADeadline({|Movement_exitV.x|},t) ; Main
 	within
 		timed_priority(Main)
 }
-TB6 = MovementStateSpent(Movement_MB,"aggregation_Movement_MovementAndAvoidance")
+TB6 = MovementStateSpent(Movement_MB,"Movement_MovementAndAvoidance")
 csp-end
 
 csp timed TB7 csp-begin
-TB7 = MovementStateSpent(360/Movement_av,"aggregation_Movement_MovementAndAvoidance_Avoid")
+TB7 = MovementStateSpent(360/Movement_av,"Movement_MovementAndAvoidance_Avoid")
 csp-end
 
 csp timed TB8 csp-begin
-TB8 = MovementStateSpent(360/Movement_av,"aggregation_Movement_Turning")
+TB8 = MovementStateSpent(360/Movement_av,"Movement_Turning")
 csp-end
 
 assertion T_AggregationSoftware_Communication_VS refines TB1 (Timed_TB1) [FD] timed
