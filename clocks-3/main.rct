@@ -1,0 +1,82 @@
+diagram main
+
+interface IEvents {
+	event object
+event term
+}
+robotic platform rp0 {
+uses IEvents provides IOps
+}
+interface IOps {
+	opA()
+}
+operation opA() {
+	terminates
+}
+module M {
+	connection rp_ref0 on object to ctrl_ref0 on object ( _async )
+	cref ctrl_ref0 = ctrl0
+	rref rp_ref0 = rp0
+connection ctrl_ref0 on term to rp_ref0 on term ( _async )
+}
+type xs
+controller ctrl0 {
+	stm stm0 {
+		uses IEvents
+		initial i0
+		clock C
+		const xs : Set(nat) =  {1,2}
+		var t : real
+		const y : int = 0
+		
+		state s0 {
+		initial i0
+			state s0 {
+				
+			
+			entry opA() ; wait ( [ 1 , 2 ] )
+			}
+			transition t0 {
+				from i0 
+				to s0
+				trigger
+			}
+			 
+		}
+		
+		transition t0 {
+			from i0
+			to s0
+		}
+	
+	requires IOps
+		
+	transition t2 {
+			from s0
+			to s1
+			trigger term
+			condition since ( C ) >= calcX ( 1 )
+		}
+		state s1 {
+		}
+		transition t3 {
+			from s1
+			to f0
+			trigger term
+			condition since ( C ) < 2
+			action 
+		# C
+		}
+	final f0
+	}
+	uses IEvents requires IOps
+}
+function calcX(x:real):real {
+	
+}
+function calcY(x:real):nat {
+	
+}
+function B(x:boolean):boolean{
+	
+}
