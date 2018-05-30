@@ -29,36 +29,36 @@ import aggregation::*
 /* Because timed transitions are not deterministic in the timed model the following is
  * expected to be not deterministic in the untimed model, but deterministic in the timed
  * model */
-assertion Communication is not deterministic (a1) untimed
-assertion Communication is deterministic (a1_timed) timed
+untimed assertion Communication is not deterministic (a1)
+timed assertion Communication is deterministic (a1_timed)
 assertion Communication is divergence-free (a2)
 
 /* Not deadlock free in this model because all transitions have timed conditions, and
  * as such they are not guaranteed to be available in the untimed CSP model. However
  * it should be deadlock free in the timed model. */
-assertion Communication is not deadlock-free (a3) untimed
-assertion Communication is deadlock-free (a3_timed) timed
+untimed assertion Communication is not deadlock-free (a3)
+timed assertion Communication is deadlock-free (a3_timed)
 
 /* It is deterministic in the timed model as is because an accurate and non-deterministic
  * definition of random() cannot be generated automatically. Because the transitions are
  * otherwhise themselves deterministic the resulting model is deterministic in the timed
  * model */ 
-assertion Movement is not deterministic (a4) untimed
-assertion Movement is deterministic (a4_timed) timed
+untimed assertion Movement is not deterministic (a4)
+timed assertion Movement is deterministic (a4_timed)
 assertion Movement is divergence-free (a5)
 
 /* Not deadlock free in this model for the same reason as above */
-assertion Movement is not deadlock-free (a6) untimed
-assertion Movement is deadlock-free (a6_timed) timed
+untimed assertion Movement is not deadlock-free (a6)
+timed assertion Movement is deadlock-free (a6_timed)
 
 /* See above for determinism */
-assertion AggregationSoftware is not deterministic (a7) untimed
-assertion AggregationSoftware is deterministic (a7_timed) timed
+untimed assertion AggregationSoftware is not deterministic (a7)
+timed assertion AggregationSoftware is deterministic (a7_timed)
 assertion AggregationSoftware is divergence-free (a8)
 
 /* Not deadlock free in this model for the same reason as above */
-assertion AggregationSoftware is not deadlock-free (a9) untimed
-assertion AggregationSoftware is deadlock-free (a9_timed) timed
+untimed assertion AggregationSoftware is not deadlock-free (a9)
+timed assertion AggregationSoftware is deadlock-free (a9_timed)
 
 
 csp Spec1 csp-begin
@@ -77,7 +77,7 @@ csp-end
 /* This won't refine because in the untimed model the timed transitions
  * can include STOP, and so it is possible for AggregationSoftware to 
  * deadlock */
-assertion Impl1 does not refine Spec1 (b1) [F] untimed
+untimed assertion Impl1 does not refine Spec1 (b1) [F]
 
 csp Spec2 csp-begin
 Spec2 = let
@@ -92,9 +92,9 @@ Impl2 = AggregationSoftware_O\diff(Events,{|moveCall,moveRet,obstacle|})
 csp-end
 
 /* Similarly to the reason for the above, this does not refine */
-assertion Impl2 does not refine Spec2 (b2) [F] untimed
+untimed assertion Impl2 does not refine Spec2 (b2) [F]
 
-csp timed TimedSpec1 csp-begin
+timed csp TimedSpec1 csp-begin
 Timed(OneStep) {
 TimedSpec1 = let
 	Responds = (|~|x:ID @ EDeadline(receive.(Communication_id,x),0) ; Responds) |~| SKIP
@@ -105,13 +105,13 @@ within
 }
 csp-end
 
-csp timed TimedImpl1 csp-begin
+timed csp TimedImpl1 csp-begin
 Timed(OneStep) {
 	TimedImpl1 = timed_priority(timed::AggregationSoftware|\{|receive,broadcast|})
 }
 csp-end
 
-csp timed TimedSpec2 csp-begin
+timed csp TimedSpec2 csp-begin
 TimedSpec2 = let
 	Moves = EDeadline(moveCall,0) ; EDeadline(moveRet,0) ; (Moves |~| SKIP)
 	Run = |~|x:Position @ obstacle.x -> Moves; Run
@@ -119,14 +119,14 @@ within
 	Moves; Run
 csp-end
 
-csp timed TimedImpl2 csp-begin
+timed csp TimedImpl2 csp-begin
 Timed(OneStep) {
 	TimedImpl2 = timed_priority(timed::AggregationSoftware|\{|moveCall,moveRet,obstacle|})
 }
 csp-end
 
-assertion TimedImpl1 refines TimedSpec1 (Timed_B1) [F] timed
-assertion TimedImpl2 refines TimedSpec2 (Timed_B2) [F] timed
+timed assertion TimedImpl1 refines TimedSpec1 (Timed_B1) [F]
+timed assertion TimedImpl2 refines TimedSpec2 (Timed_B2) [F]
 
 /******************************************************************************
  * TA Requirements.
@@ -139,7 +139,7 @@ assertion Communication is not timelock-free (Timed_TA1_C)
 assertion AggregationSoftware is not timelock-free (Timed_TA1_A)
 
 /* Instead can define different processes that hide those events. */
-csp timed T_Communication_WithoutDeadlines csp-begin
+timed csp T_Communication_WithoutDeadlines csp-begin
 TA_ExternalEvents_Communication_WithoutDeadlines = {|Communication_robots|}
 
 T_Communication_WithoutDeadlines = prioritise(timed::Communication |\ union(TA_ExternalEvents_Communication_WithoutDeadlines,{tock}),<{},{tock}>)
@@ -148,7 +148,7 @@ csp-end
 /* The verification for timelock freedom, which is essentially what we are doing here,
  * must be done in the Failures model unless we make assumptions about the behaviour of
  * the environment as below in T_IdealCommunication_WithoutDeadlines. */
-csp timed T_IdealCommunication_WithoutDeadlines csp-begin
+timed csp T_IdealCommunication_WithoutDeadlines csp-begin
 
 -- At most a broadcast followed by a receive, or a receive, per time unit.
 Communication_OfferBroadcastOrReceive = (Communication_broadcast?x -> Communication_receive?x -> SKIP ||| Communication_receive?x -> SKIP) /\ tock -> Communication_OfferBroadcastOrReceive
@@ -158,20 +158,20 @@ T_IdealCommunication_WithoutDeadlines = prioritise(TA_IdealCommunication |\ unio
 
 csp-end
 
-csp timed T_A1_C csp-begin
+timed csp T_A1_C csp-begin
 T_A1_C = RUN({tock}) ||| CHAOS(TA_ExternalEvents_Communication_WithoutDeadlines)
 csp-end
 
-assertion T_Communication_WithoutDeadlines refines T_A1_C (Timed_TA1_C_NoDeadlines) [F] timed
-assertion T_IdealCommunication_WithoutDeadlines refines T_A1_C (Timed_TA1_C_Ideal_NoDeadlines) timed
+timed assertion T_Communication_WithoutDeadlines refines T_A1_C (Timed_TA1_C_NoDeadlines) [F]
+timed assertion T_IdealCommunication_WithoutDeadlines refines T_A1_C (Timed_TA1_C_Ideal_NoDeadlines)
 
-csp timed T_AggregationSoftware_WithoutDeadlines csp-begin
+timed csp T_AggregationSoftware_WithoutDeadlines csp-begin
 TA_ExternalEvents_AggregationSoftware_WithoutDeadlines = {|obstacle|}
 
 T_AggregationSoftware_WithoutDeadlines = prioritise(timed::AggregationSoftware |\ union(TA_ExternalEvents_AggregationSoftware_WithoutDeadlines,{tock}),<{},{tock}>)
 csp-end
 
-csp timed T_IdealAggregationSoftware_WithoutDeadlines csp-begin
+timed csp T_IdealAggregationSoftware_WithoutDeadlines csp-begin
 
 -- At most a broadcast followed by a receive, or a receive, per time unit.
 OfferBroadcastOrReceive = (broadcast?x -> receive?x -> SKIP ||| receive?x -> SKIP) /\ tock -> OfferBroadcastOrReceive
@@ -181,12 +181,12 @@ TA_IdealSoftware = timed::AggregationSoftware [| {|tock, broadcast, receive|} |]
 T_IdealAggregationSoftware_WithoutDeadlines = prioritise(TA_IdealSoftware |\ union(TA_ExternalEvents_AggregationSoftware_WithoutDeadlines,{tock}),<{},{tock}>)
 csp-end
 
-csp timed T_A1_A csp-begin
+timed csp T_A1_A csp-begin
 T_A1_A = RUN({tock}) ||| CHAOS(TA_ExternalEvents_AggregationSoftware_WithoutDeadlines)
 csp-end
 
-assertion T_AggregationSoftware_WithoutDeadlines refines T_A1_A (Timed_TA1_A_NoDeadlines) [F] timed
-assertion T_IdealAggregationSoftware_WithoutDeadlines refines T_A1_A (Timed_TA1_A_Ideal_NoDeadlines) timed
+timed assertion T_AggregationSoftware_WithoutDeadlines refines T_A1_A (Timed_TA1_A_NoDeadlines) [F]
+timed assertion T_IdealAggregationSoftware_WithoutDeadlines refines T_A1_A (Timed_TA1_A_Ideal_NoDeadlines)
 
 /** REACHABILITY **/
 
@@ -206,7 +206,7 @@ assertion Communication::Receive is reachable in AggregationSoftware (TA_2_Commu
  * TB Requirements.
  ******************************************************************************/
 
-csp timed AuxiliaryDefinitions csp-begin
+timed csp AuxiliaryDefinitions csp-begin
 
 -- Auxiliary definitions
 -- This should allow any other events (including tock) up to 'd' time units to elapse, and
@@ -239,23 +239,23 @@ EnterExactly(t) =
 
 csp-end
 
-csp timed T_AggregationSoftware_Communication_VS csp-begin
+timed csp T_AggregationSoftware_Communication_VS csp-begin
 T_AggregationSoftware_Communication_VS = ShowV_Communication(timed::AggregationSoftware_VS)
 csp-end
 
-csp timed TB1 csp-begin
+timed csp TB1 csp-begin
 TB1 = CommunicationStateSpent(Communication_RC,"Communication_Receive")
 csp-end
 
-csp timed TB2 csp-begin
+timed csp TB2 csp-begin
 TB2 = EnterExactly(Communication_RC)
 csp-end
 
-csp timed TB3 csp-begin
+timed csp TB3 csp-begin
 TB3 = CommunicationStateSpent(0,"Communication_Broadcast")
 csp-end
 
-csp timed TB4 csp-begin
+timed csp TB4 csp-begin
 NoEvent = AnyOther({|broadcast.Communication_id|}) ; BroadcastHappened(0)
 
 BroadcastHappened(t) = (t < Communication_RC & (broadcast ?x-> SomeHappened(t) 
@@ -273,7 +273,7 @@ SomeHappened(t) = t < Communication_RC & (AnyOther({tock}) ; SomeHappened(t+1))
 TB4 = CHAOS({|moveCall,moveRet,obstacle,tock|}) [| {tock} |] NoEvent
 csp-end
 
-csp timed TB5 csp-begin
+timed csp TB5 csp-begin
 Timed(OneStep) {
 -- Requirement TB.5
 EveryMBEnterTurning =
@@ -286,11 +286,11 @@ EveryMBEnterTurning =
 TB5 = EveryMBEnterTurning
 csp-end
 
-csp timed T_AggregationSoftware_Movement_VS csp-begin
+timed csp T_AggregationSoftware_Movement_VS csp-begin
 T_AggregationSoftware_Movement_VS = ShowV_Movement(timed::AggregationSoftware_VS)
 csp-end
 
-csp timed TB6 csp-begin
+timed csp TB6 csp-begin
 Timed(OneStep) {
 MovementStateSpent(t,x) =
 	let
@@ -301,20 +301,20 @@ MovementStateSpent(t,x) =
 TB6 = MovementStateSpent(Movement_MB,"Movement_MovementAndAvoidance")
 csp-end
 
-csp timed TB7 csp-begin
+timed csp TB7 csp-begin
 TB7 = MovementStateSpent(360/Movement_av,"Movement_MovementAndAvoidance_Avoid")
 csp-end
 
-csp timed TB8 csp-begin
+timed csp TB8 csp-begin
 TB8 = MovementStateSpent(360/Movement_av,"Movement_Turning")
 csp-end
 
-assertion T_AggregationSoftware_Communication_VS refines TB1 (Timed_TB1) [FD] timed
-assertion T_AggregationSoftware_Communication_VS refines TB2 (Timed_TB2) [FD] timed
-assertion T_AggregationSoftware_Communication_VS refines TB3 (Timed_TB3) [FD] timed
-assertion AggregationSoftware refines TB4 (Timed_TB4) [FD] timed
-assertion T_AggregationSoftware_Movement_VS refines TB5 (Timed_TB5) [FD] timed
-assertion T_AggregationSoftware_Movement_VS refines TB6 (Timed_TB6) [FD] timed
-assertion T_AggregationSoftware_Movement_VS refines TB7 (Timed_TB7) [FD] timed
-assertion T_AggregationSoftware_Movement_VS refines TB8 (Timed_TB8) [FD] timed
+timed assertion T_AggregationSoftware_Communication_VS refines TB1 (Timed_TB1) [FD]
+timed assertion T_AggregationSoftware_Communication_VS refines TB2 (Timed_TB2) [FD]
+timed assertion T_AggregationSoftware_Communication_VS refines TB3 (Timed_TB3) [FD]
+timed assertion AggregationSoftware refines TB4 (Timed_TB4) [FD]
+timed assertion T_AggregationSoftware_Movement_VS refines TB5 (Timed_TB5) [FD]
+timed assertion T_AggregationSoftware_Movement_VS refines TB6 (Timed_TB6) [FD]
+timed assertion T_AggregationSoftware_Movement_VS refines TB7 (Timed_TB7) [FD]
+timed assertion T_AggregationSoftware_Movement_VS refines TB8 (Timed_TB8) [FD]
 
