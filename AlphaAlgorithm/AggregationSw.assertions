@@ -52,7 +52,7 @@ csp Impl1 csp-begin
 Impl1 = AggregationSoftware_O\diff(Events,{|receive,broadcast|})
 csp-end
 
-assertion Impl1 refines Spec1 (b1) [F] untimed
+untimed assertion Impl1 refines Spec1 (b1) [F]
 
 csp Spec2 csp-begin
 Spec2 = let
@@ -66,4 +66,4 @@ csp Impl2 csp-begin
 Impl2 = AggregationSoftware_O\diff(Events,{|moveCall,moveRet,obstacle|})
 csp-end
 
-assertion Impl2 refines Spec2 (b2) [F] untimed
+untimed assertion Impl2 refines Spec2 (b2) [F]
