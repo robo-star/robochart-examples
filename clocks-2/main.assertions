@@ -1,0 +1,16 @@
+
+/* The state machine, controller, and module, can all terminate if the wait is 1 time unit. */
+assertion ctrl0::stm0 is not deadlock-free (R1)
+assertion ctrl0::stm0 terminates (R2)
+
+assertion ctrl0 terminates (R3)
+assertion M terminates (R4)
+
+/* Not deterministic because of the non-deterministic wait. */
+assertion ctrl0::stm0 is not deterministic (R5)
+assertion ctrl0 is not deterministic (R6)
+assertion M is not deterministic (R7)
+
+/* The transition from s0 to s1 depends on C, which has not been reset at least once. */
+assertion clock ctrl0::stm0::C is not initialised (C1)
+

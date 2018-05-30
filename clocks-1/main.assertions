@@ -1,0 +1,9 @@
+
+/* It is deadlock free because it does not terminate. The transition to the final
+ * state cannot be triggered because by the time s1 is reached it is no longer true.
+ */
+assertion ctrl0::stm0 is deadlock-free (R2)
+assertion ctrl0::stm0 does not terminate (R3)
+
+/* The transition from s0 to s1 depends on C, which has not been reset at least once. */
+assertion clock ctrl0::stm0::C is not initialised (C1)
