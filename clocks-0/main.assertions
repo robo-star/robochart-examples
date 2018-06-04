@@ -1,6 +1,6 @@
 
 /* The state machine does not terminate.  */
-assertion ctrl0::stm0 is deadlock-free (R1)
+timed assertion ctrl0::stm0 is deadlock-free (R1)
 assertion ctrl0::stm0 does not terminate (R2)
 
 /* Clock is not initialised before the transition from s0 to s1. */

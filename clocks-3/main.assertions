@@ -1,10 +1,10 @@
 
 /* The state machine, controller, and module, can all terminate if the wait is 1 time unit. */
 assertion ctrl0::stm0 is not deadlock-free (R1)
-assertion ctrl0::stm0 terminates (R2)
+timed assertion ctrl0::stm0 terminates (R2)
 
-assertion ctrl0 terminates (R3)
-assertion M terminates (R4)
+timed assertion ctrl0 terminates (R3)
+timed assertion M terminates (R4)
 
 /* Not deterministic because of the non-deterministic wait. */
 assertion ctrl0::stm0 is not deterministic (R5)
