@@ -1,0 +1,8 @@
+controller MovementC {
+	requires MovingHw
+	uses MovingHwE 
+	uses SensingHw 
+	sref stm_ref0 = Movement
+	connection stm_ref0 on obstacle to MovementC on obstacle
+	connection stm_ref0 on neighbours to MovementC on neighbours
+}

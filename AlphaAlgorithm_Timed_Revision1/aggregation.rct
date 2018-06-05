@@ -1,0 +1,105 @@
+import Mathematics::*
+interface MovingHw {
+	move( l : real , a : real)
+}
+interface MovingHwE {
+	event obstacle : Position
+}
+
+interface SensingHw {
+event neighbours : nat
+}
+stm Movement {
+	requires MovingHw
+	uses MovingHwE
+	uses SensingHw
+	const lv : real , av : real, MB : real, alpha : nat
+	var n : nat, p : Position, turned : boolean
+	clock MBC
+	initial i1
+	state MovementAndAvoidance {
+		initial i1
+		state Move {
+			entry move( lv , 0)   
+		}      
+		state Avoid {
+			
+		entry if ( p == Position::left ) then move( 0 , av) else move( 0 , - av) end ;
+			wait ( floor (random ( ) * 360 / av) )
+		}
+		transition t1 {
+			from i1
+			to Move
+		}
+		transition t2 { 
+			from Move
+			to Avoid
+			trigger obstacle ? p
+			condition since ( MBC ) < (MB - 360 / av)
+		}
+		transition t3 {
+			from Avoid
+			to Move
+		}
+	}
+	state Turning {
+	initial i1
+		junction j1
+		state Turn180 {
+		
+		
+		entry move( 0 , av) ; wait ( floor(180 / av) )
+		}
+		state RandomTurn {
+		entry move( 0 , av) ; wait ( floor(random ( ) * 360 / av) )
+		}
+		final f1
+		transition t1 {
+			from i1  
+			to j1
+		}
+		transition t2 {
+			from j1
+			to Turn180
+			trigger
+			condition n > alpha
+		}
+		transition t3 {
+			from j1
+			to RandomTurn
+			trigger
+			condition n <= alpha
+		}
+	transition t4 {
+			from Turn180
+			to f1
+			trigger
+			action turned = true
+		}
+		transition t5 {
+			from RandomTurn
+			to f1
+			trigger
+			action turned = true
+		}
+		entry send neighbours ? n ; turned = false
+	}
+	transition t1 {
+		from i1
+		to MovementAndAvoidance
+		trigger # MBC
+	}
+transition t2 {
+		from MovementAndAvoidance
+		to Turning
+		trigger
+		condition since ( MBC ) >= MB
+		action # MBC
+	}
+	transition t3 {
+		from Turning
+		to MovementAndAvoidance
+	trigger
+		condition turned == true
+	}
+}
