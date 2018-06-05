@@ -4,10 +4,16 @@
  */
 timed assertion ctrl0::stm0 is deadlock-free (R2)
 timed assertion ctrl0::stm0 does not terminate (R3timed)
+
 /* It can terminate in the untimed model, because the transition to the final state
  * is non-deterministic, as there is no timed information it may or may not be taken.
+ * 
+ * But it the untimed model it can deadlock in s0 or s1 because those transitions may not 
+ * be possible. So it neither satisfies 'terminates' nor 'does not terminate'.
+ * 
  */
-untimed assertion ctrl0::stm0 terminates (R3untimed)
+// untimed assertion ctrl0::stm0 terminates (R3untimed)
+untimed assertion ctrl0::stm0::f0 is reachable in ctrl0::stm0 (R3reachable)
 
 /* The transition from s0 to s1 depends on C, which has not been reset at least once. */
 assertion clock ctrl0::stm0::C is not initialised (C1)
