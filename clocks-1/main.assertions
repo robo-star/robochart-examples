@@ -7,7 +7,7 @@ timed assertion ctrl0::stm0 does not terminate (R3timed)
 /* It can terminate in the untimed model, because the transition to the final state
  * is non-deterministic, as there is no timed information it may or may not be taken.
  */
-untimed assertion ctrl0::stm0 does not terminate (R3untimed)
+untimed assertion ctrl0::stm0 terminates (R3untimed)
 
 /* The transition from s0 to s1 depends on C, which has not been reset at least once. */
 assertion clock ctrl0::stm0::C is not initialised (C1)
