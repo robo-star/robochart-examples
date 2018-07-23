@@ -1,6 +1,7 @@
 controller CommunicationC {
 	uses CommHw uses Internal sref stm_ref0 = Communication
 	connection stm_ref0 on robots to CommunicationC on robots
-	connection stm_ref0 on receive to CommunicationC on receive
+	connection stm_ref0 on receive to CommunicationC on receive [ mult ]
 	connection stm_ref0 on broadcast to CommunicationC on broadcast
+[ mult ]
 }
