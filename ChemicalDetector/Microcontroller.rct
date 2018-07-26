@@ -4,8 +4,12 @@ controller Microcontroller {
 	event lights : Color
 	event alarm : Chemical
 sref stm_ref0 = Signalling
-	connection Microcontroller on flag to stm_ref0 on flag
-	connection Microcontroller on siren to stm_ref0 on siren
-	connection Microcontroller on lights to stm_ref0 on light
+	
+	
+	
 	connection Microcontroller on alarm to stm_ref0 on detect
+connection stm_ref0 on flag to Microcontroller on flag
+	
+	connection stm_ref0 on siren to Microcontroller on siren
+	connection stm_ref0 on light to Microcontroller on lights
 }

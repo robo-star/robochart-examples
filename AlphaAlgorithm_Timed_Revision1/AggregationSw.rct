@@ -10,10 +10,11 @@ module AggregationSoftware {
 	}
 	cref ctrl_ref0 = MovementC
 	cref ctrl_ref1 = CommunicationC
-	connection ctrl_ref0 on obstacle to ePuck on obstacle (_async)
-	connection ePuck on receive to ctrl_ref1 on receive (_async)
-	connection ePuck on broadcast to ctrl_ref1 on broadcast (_async)
+	
+	connection ePuck on receive to ctrl_ref1 on receive (_async) [ mult ]
+	connection ePuck on broadcast to ctrl_ref1 on broadcast (_async) [ mult ]
 	connection ctrl_ref1 on robots to ctrl_ref0 on neighbours (_async)
+connection ePuck on obstacle to ctrl_ref0 on obstacle ( _async )
 }
 enumeration Position { left right } operation move( l : real , a : real) {
 	terminates
