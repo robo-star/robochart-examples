@@ -41,9 +41,9 @@ assertion AggregationSoftware is deadlock-free (a9)
 
 csp Spec1 csp-begin
 Spec1 = let
-Responds = (|~|x:ID @ receive.(Communication_id,x) -> Responds) |~| SKIP
-Run = broadcast?x:diff(ID,{Communication_id}) -> receive!(x,Communication_id) -> Run |~| SKIP
-Main = broadcast.Communication_id -> (Responds|||Run); Main
+Responds = (|~|x:ID @ receive.in.(Communication_id,x) -> Responds) |~| SKIP
+Run = broadcast.in?x:diff(ID,{Communication_id}) -> receive.out!(x,Communication_id) -> Run |~| SKIP
+Main = broadcast.out.Communication_id -> (Responds|||Run); Main
 within
 Main
 csp-end
@@ -57,7 +57,7 @@ untimed assertion Impl1 refines Spec1 (b1) [F]
 csp Spec2 csp-begin
 Spec2 = let
 Moves = moveCall -> moveRet -> (Moves |~| SKIP)
-Run = |~|x:Position @ obstacle.x -> Moves; Run
+Run = |~|x:Position @ obstacle.in.x -> Moves; Run
 within
 Moves; Run
 csp-end 

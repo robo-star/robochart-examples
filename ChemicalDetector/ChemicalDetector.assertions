@@ -31,18 +31,18 @@ csp-end
 assertion OnlyGasAndLight is deadlock-free (a3)
 
 csp Spec1 csp-begin
-Commands = cd?x -> (|~|e: {|turn,incrCall,decrCall|} @ e -> Commands)
-Init = light.green -> SKIP ||| gas -> SKIP
+Commands = cd.in?x -> (|~|e: {|turn.out,incrCall,decrCall|} @ e -> Commands)
+Init = light.out.green -> SKIP ||| gas.in -> SKIP
 GasLight = let
   T = (
-    gas -> SKIP
+    gas.in -> SKIP
     |||
     (
-      light.red -> siren -> flag -> SKIP
+      light.out.red -> siren.out -> flag.out -> SKIP
       |~|
-      light.green -> SKIP
+      light.out.green -> SKIP
       |~|
-      light.amber -> SKIP
+      light.out.amber -> SKIP
     )
   ); T
 within
