@@ -1935,7 +1935,7 @@
         </edges>
         <edges xmi:type="notation:Edge" xmi:id="_K5daEPnNEeajZrdRuO8lYA" type="4001" element="_DomHkI_vEeiW17FXvdoxYA" source="_GAk_l_nNEeajZrdRuO8lYA" target="_GAk_l_nNEeajZrdRuO8lYA">
           <children xmi:type="notation:Node" xmi:id="_K5daFPnNEeajZrdRuO8lYA" type="6001">
-            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_K5daFfnNEeajZrdRuO8lYA" x="-43" y="20"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_K5daFfnNEeajZrdRuO8lYA" x="-39" y="20" width="239" height="36"/>
           </children>
           <children xmi:type="notation:Node" xmi:id="_K5daFvnNEeajZrdRuO8lYA" type="6002">
             <layoutConstraint xmi:type="notation:Bounds" xmi:id="_K5daF_nNEeajZrdRuO8lYA" x="19" y="-10"/>
@@ -2268,7 +2268,7 @@
       </ownedStyle>
       <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/plugin/circus.robocalc.graphical.robochart/description/robochart.odesign#//@ownedViewpoints[name='RoboChartID']/@ownedRepresentations[name='SpecificationID']/@defaultLayer/@edgeMappings[name='TransitionID']"/>
     </ownedDiagramElements>
-    <ownedDiagramElements xmi:type="diagram:DEdge" xmi:id="_DomHkI_vEeiW17FXvdoxYA" name="broadcast?y[since(RCC)&lt;RC]/receive!(|y, id|) &lt;{0}" sourceNode="_Dn6yII_vEeiW17FXvdoxYA" targetNode="_Dn6yII_vEeiW17FXvdoxYA">
+    <ownedDiagramElements xmi:type="diagram:DEdge" xmi:id="_DomHkI_vEeiW17FXvdoxYA" name="broadcast?y[y!=id/\since(RCC)&lt;RC]/receive!(|y, id|) &lt;{0}" sourceNode="_Dn6yII_vEeiW17FXvdoxYA" targetNode="_Dn6yII_vEeiW17FXvdoxYA">
       <target xmi:type="robochart:Transition" href="communication.rct#//@machines.0/@transitions.2"/>
       <semanticElements xmi:type="robochart:Transition" href="communication.rct#//@machines.0/@transitions.2"/>
       <ownedStyle xmi:type="diagram:EdgeStyle" xmi:id="_DomHkY_vEeiW17FXvdoxYA" size="2" routingStyle="manhattan">
