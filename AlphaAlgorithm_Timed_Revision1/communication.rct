@@ -41,7 +41,7 @@ stm Communication {
 		from Receive
 		to Receive
 	trigger broadcast ? y
-		condition since ( RCC ) < RC
+		condition y != id /\ since ( RCC ) < RC
 		action receive ! (| y , id |) <{ 0 }
 	}
 
