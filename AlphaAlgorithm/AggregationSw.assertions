@@ -49,7 +49,7 @@ Main
 csp-end
 
 csp Impl1 csp-begin
-Impl1 = AggregationSoftware_O\diff(Events,{|receive,broadcast|})
+Impl1 = AggregationSoftware_O(0)\diff(Events,{|receive,broadcast|})
 csp-end
 
 untimed assertion Impl1 refines Spec1 (b1) [F]
@@ -63,7 +63,7 @@ Moves; Run
 csp-end 
 
 csp Impl2 csp-begin
-Impl2 = AggregationSoftware_O\diff(Events,{|moveCall,moveRet,obstacle|})
+Impl2 = AggregationSoftware_O(0)\diff(Events,{|moveCall,moveRet,obstacle|})
 csp-end
 
 untimed assertion Impl2 refines Spec2 (b2) [F]

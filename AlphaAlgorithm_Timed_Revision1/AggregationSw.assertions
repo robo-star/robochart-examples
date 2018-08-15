@@ -71,7 +71,7 @@ within
 csp-end
 
 csp Impl1 csp-begin
-Impl1 = AggregationSoftware_O\diff(Events,{|receive,broadcast|})
+Impl1 = AggregationSoftware_O(0)\diff(Events,{|receive,broadcast|})
 csp-end
 
 /* This won't refine because in the untimed model the timed transitions
@@ -88,7 +88,7 @@ Moves; Run
 csp-end 
 
 csp Impl2 csp-begin
-Impl2 = AggregationSoftware_O\diff(Events,{|moveCall,moveRet,obstacle|})
+Impl2 = AggregationSoftware_O(0)\diff(Events,{|moveCall,moveRet,obstacle|})
 csp-end
 
 /* Similarly to the reason for the above, this does not refine */

@@ -19,13 +19,13 @@ csp-end
 assertion Detecting is not deterministic (a1)
 
 csp OnlyCommands csp-begin
-OnlyCommands = ChemicalDetectorSoftware_O [|{|gas,light|}|] STOP
+OnlyCommands = ChemicalDetectorSoftware_O(0) [|{|gas,light|}|] STOP
 csp-end
 
 assertion OnlyCommands is deadlock-free (a2)
 
 csp OnlyGasAndLight csp-begin
-OnlyGasAndLight = ChemicalDetectorSoftware_O [|{|cd|}|] STOP
+OnlyGasAndLight = ChemicalDetectorSoftware_O(0) [|{|cd|}|] STOP
 csp-end
 
 assertion OnlyGasAndLight is deadlock-free (a3)
@@ -51,7 +51,7 @@ Spec1 = Commands ||| GasLight
 csp-end
 
 csp Impl1 csp-begin
-Impl1 = ChemicalDetectorSoftware_O\{|incrRet,decrRet|}
+Impl1 = ChemicalDetectorSoftware_O(0)\{|incrRet,decrRet|}
 csp-end
 
 assertion Impl1 refines Spec1 (a4)
