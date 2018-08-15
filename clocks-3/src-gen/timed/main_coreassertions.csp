@@ -1,0 +1,6 @@
+-- generate includes
+include "main.csp"
+include "defs/opA_coreassertions.csp"
+include "defs/M_coreassertions.csp"
+include "defs/ctrl0_stm0_coreassertions.csp"
+include "defs/ctrl0_coreassertions.csp"

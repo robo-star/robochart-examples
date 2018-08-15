@@ -107,7 +107,7 @@ csp-end
 
 timed csp TimedImpl1 csp-begin
 Timed(OneStep) {
-	TimedImpl1 = timed_priority(timed::AggregationSoftware|\{|tock,receive,broadcast|})
+	TimedImpl1 = timed_priority(timed::AggregationSoftware(0)|\{|tock,receive,broadcast|})
 }
 csp-end
 
@@ -121,7 +121,7 @@ csp-end
 
 timed csp TimedImpl2 csp-begin
 Timed(OneStep) {
-	TimedImpl2 = timed_priority(timed::AggregationSoftware|\{|moveCall,moveRet,obstacle|})
+	TimedImpl2 = timed_priority(timed::AggregationSoftware(0)|\{|moveCall,moveRet,obstacle|})
 }
 csp-end
 
@@ -142,7 +142,7 @@ assertion AggregationSoftware is not timelock-free (Timed_TA1_A)
 timed csp T_Communication_WithoutDeadlines csp-begin
 TA_ExternalEvents_Communication_WithoutDeadlines = {|Communication_robots|}
 
-T_Communication_WithoutDeadlines = prioritise(timed::Communication |\ union(TA_ExternalEvents_Communication_WithoutDeadlines,{tock}),<{},{tock}>)
+T_Communication_WithoutDeadlines = prioritise(timed::Communication(0) |\ union(TA_ExternalEvents_Communication_WithoutDeadlines,{tock}),<{},{tock}>)
 csp-end
 
 /* The verification for timelock freedom, which is essentially what we are doing here,
@@ -153,7 +153,7 @@ timed csp T_IdealCommunication_WithoutDeadlines csp-begin
 -- At most a broadcast followed by a receive, or a receive, per time unit.
 Communication_OfferBroadcastOrReceive = (Communication_broadcast?x -> Communication_receive?x -> SKIP ||| Communication_receive?x -> SKIP) /\ tock -> Communication_OfferBroadcastOrReceive
 
-TA_IdealCommunication = timed::Communication [| {|Communication_broadcast, Communication_receive, tock|} |] Communication_OfferBroadcastOrReceive
+TA_IdealCommunication = timed::Communication(0) [| {|Communication_broadcast, Communication_receive, tock|} |] Communication_OfferBroadcastOrReceive
 T_IdealCommunication_WithoutDeadlines = prioritise(TA_IdealCommunication |\ union(TA_ExternalEvents_Communication_WithoutDeadlines,{tock}),<{},{tock}>)
 
 csp-end
@@ -168,7 +168,7 @@ timed assertion T_IdealCommunication_WithoutDeadlines refines T_A1_C (Timed_TA1_
 timed csp T_AggregationSoftware_WithoutDeadlines csp-begin
 TA_ExternalEvents_AggregationSoftware_WithoutDeadlines = {|obstacle|}
 
-T_AggregationSoftware_WithoutDeadlines = prioritise(timed::AggregationSoftware |\ union(TA_ExternalEvents_AggregationSoftware_WithoutDeadlines,{tock}),<{},{tock}>)
+T_AggregationSoftware_WithoutDeadlines = prioritise(timed::AggregationSoftware(0) |\ union(TA_ExternalEvents_AggregationSoftware_WithoutDeadlines,{tock}),<{},{tock}>)
 csp-end
 
 timed csp T_IdealAggregationSoftware_WithoutDeadlines csp-begin
@@ -176,7 +176,7 @@ timed csp T_IdealAggregationSoftware_WithoutDeadlines csp-begin
 -- At most a broadcast followed by a receive, or a receive, per time unit.
 OfferBroadcastOrReceive = (broadcast?x -> receive?x -> SKIP ||| receive?x -> SKIP) /\ tock -> OfferBroadcastOrReceive
 
-TA_IdealSoftware = timed::AggregationSoftware [| {|tock, broadcast, receive|} |] OfferBroadcastOrReceive
+TA_IdealSoftware = timed::AggregationSoftware(0) [| {|tock, broadcast, receive|} |] OfferBroadcastOrReceive
 
 T_IdealAggregationSoftware_WithoutDeadlines = prioritise(TA_IdealSoftware |\ union(TA_ExternalEvents_AggregationSoftware_WithoutDeadlines,{tock}),<{},{tock}>)
 csp-end
@@ -240,7 +240,7 @@ EnterExactly(t) =
 csp-end
 
 timed csp T_AggregationSoftware_Communication_VS csp-begin
-T_AggregationSoftware_Communication_VS = ShowV_Communication(timed::AggregationSoftware_VS)
+T_AggregationSoftware_Communication_VS = ShowV_Communication(timed::AggregationSoftware_VS(0))
 csp-end
 
 timed csp TB1 csp-begin
@@ -287,7 +287,7 @@ TB5 = EveryMBEnterTurning
 csp-end
 
 timed csp T_AggregationSoftware_Movement_VS csp-begin
-T_AggregationSoftware_Movement_VS = ShowV_Movement(timed::AggregationSoftware_VS)
+T_AggregationSoftware_Movement_VS = ShowV_Movement(timed::AggregationSoftware_VS(0))
 csp-end
 
 timed csp TB6 csp-begin

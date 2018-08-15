@@ -1,0 +1,50 @@
+-- declaring controller events
+channel ctrl0_object: InOut
+channel ctrl0_term: InOut
+
+-- declaring controller variables
+
+
+
+-- declaring controller memory
+
+Memory_ctrl0(id) = SKIP
+
+-- delcaring controller termination channel
+
+channel ctrl0_terminate
+
+ctrl0(id) = (ctrl0_stm0(id)[[ctrl0_stm0_terminate <- ctrl0_terminate]]
+	[|union({||},
+	{||})|]
+	Memory_ctrl0(id)
+)\union({||},
+{||})
+[|{|ctrl0_terminate|}|>SKIP
+
+-- VS version
+ctrl0_VS(id) = (ctrl0_stm0_VS(id)[[ctrl0_stm0_terminate <- ctrl0_terminate]]
+	[|union({||},
+	{||})|]
+	Memory_ctrl0(id)
+)\union({||},
+{||})
+[|{|ctrl0_terminate|}|>SKIP
+
+-- O version (optimised) THESE TWO PROCESSES SHOULD BE KEPT IN SYNC WITH THE ABOVE TWO
+ctrl0_O(id) = sbisim(diamond((ctrl0_stm0_O(id)[[ctrl0_stm0_terminate <- ctrl0_terminate]]
+	[|union({||},
+	{||})|]
+	Memory_ctrl0(id)
+)\union({||},
+{||})
+[|{|ctrl0_terminate|}|>SKIP))
+
+-- VS_O version
+ctrl0_VS_O(id) = sbisim(diamond((ctrl0_stm0_VS_O(id)[[ctrl0_stm0_terminate <- ctrl0_terminate]]
+	[|union({||},
+	{||})|]
+	Memory_ctrl0(id)
+)\union({||},
+{||})
+[|{|ctrl0_terminate|}|>SKIP))

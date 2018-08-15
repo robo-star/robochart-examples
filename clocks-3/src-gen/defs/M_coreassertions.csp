@@ -1,0 +1,6 @@
+assert M_O(0) :[deadlock-free]	
+assert M_O(0);RUN({r__}) :[deadlock-free]
+assert M_O(0) :[deterministic]
+assert M_O(0) :[divergence-free]
+	
+chase_M = chase(M_O(0))

@@ -1,0 +1,54 @@
+-- R1 - not deadlock free
+assert not timed::ctrl0_stm0(0) :[deadlock free]
+
+-- R2 - terminating
+assert not timed::ctrl0_stm0(0) :[deadlock free]
+assert timed::ctrl0_stm0(0); RUN({r__}) :[deadlock free]
+
+-- R3 - terminating
+assert not timed::ctrl0(0) :[deadlock free]
+assert timed::ctrl0(0); RUN({r__}) :[deadlock free]
+
+-- R4 - terminating
+assert not timed::M(0) :[deadlock free]
+assert timed::M(0); RUN({r__}) :[deadlock free]
+
+-- R5 - non deterministic
+assert not timed::ctrl0_stm0(0) :[deterministic]
+
+-- R6 - non deterministic
+assert not timed::ctrl0(0) :[deterministic]
+
+-- R7 - non deterministic
+assert not timed::M(0) :[deterministic]
+
+-- C1 - clock ctrl0_stm0_C not initialised in ctrl0_stm0
+assert not CHAOS(diff(Events,{|ctrl0_stm0_term__."ctrl0_stm0_t2",ctrl0_stm0_term__."ctrl0_stm0_t3"|})) [| {| timed::ctrl0_stm0_clockReset."C" |} |> CHAOS(Events) [T= timed::ctrl0_stm0_internal_(0)
+
+include "../instantiations.csp"
+
+include "../defs/robochart_defs.csp"
+include "../defs/core_defs.csp"
+include "defs/timed_definitions.csp"
+
+include "../defs/M.csp"
+include "../defs/ctrl0.csp"
+include "../defs/main_defs.csp"
+include "../defs/ctrl0_stm0.csp"
+include "../defs/opA.csp"
+channel opACall, opARet
+
+channel r__
+			
+transparent diamond
+transparent sbisim
+transparent chase
+transparent wbisim
+
+module timed
+exports
+include "defs/ctrl0.csp"
+include "defs/opA.csp"
+include "defs/M.csp"
+include "defs/ctrl0_stm0.csp"
+endmodule
