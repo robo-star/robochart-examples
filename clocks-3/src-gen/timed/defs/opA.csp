@@ -1,6 +1,0 @@
-Timed(OneStep) {
-opA(id) = let
-AUX(N) = if (N == 0) then SKIP else
-	  SKIP
-            within AUX(opA_BOUND)
-}

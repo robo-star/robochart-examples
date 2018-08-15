@@ -1,6 +1,0 @@
-assert opA_O(0) :[deadlock-free]	
-assert opA_O(0);RUN({r__}) :[deadlock-free]
-assert opA_O(0) :[deterministic]
-assert opA_O(0) :[divergence-free]
-	
-chase_opA = chase(opA_O(0))

@@ -1,6 +1,0 @@
-assert ctrl0_stm0_O(0) :[deadlock-free]	
-assert ctrl0_stm0_O(0);RUN({r__}) :[deadlock-free]
-assert ctrl0_stm0_O(0) :[deterministic]
-assert ctrl0_stm0_O(0) :[divergence-free]
-	
-chase_ctrl0_stm0 = chase(ctrl0_stm0_O(0))
