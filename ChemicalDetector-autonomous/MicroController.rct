@@ -27,9 +27,10 @@ connection MicroController on turn to stm_ref0 on turn
 	
 	connection MicroController on resume to stm_ref0 on resume
 	
-	connection stm_ref0 on stop to MicroController on stop
+	
 	
 	connection MicroController on odometer to stm_ref0 on odometer
 opref op_ref0 = changeDirection
+connection MicroController on stop to stm_ref0 on stop
 }
 import Location::*

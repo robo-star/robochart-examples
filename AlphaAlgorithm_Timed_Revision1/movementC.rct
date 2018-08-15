@@ -3,6 +3,9 @@ controller MovementC {
 	uses MovingHwE 
 	uses SensingHw 
 	sref stm_ref0 = Movement
-	connection stm_ref0 on obstacle to MovementC on obstacle
-	connection stm_ref0 on neighbours to MovementC on neighbours
+	
+	
+connection MovementC on neighbours to stm_ref0 on neighbours
+	
+	connection MovementC on obstacle to stm_ref0 on obstacle
 }

@@ -8,7 +8,7 @@ assertion Movement terminates (a5)
 assertion ChemicalDetector terminates (a6)
 
 csp Spec1 csp-begin
-Spec1 = GasAnalysis_gas?x -> (|~|e:{|GasAnalysis_resume, GasAnalysis_stop, GasAnalysis_turn|} @ e->Spec1)
+Spec1 = GasAnalysis_gas.in?x -> (|~|e:{|GasAnalysis_resume, GasAnalysis_stop, GasAnalysis_turn|} @ e->Spec1)
         |~|
         SKIP
 csp-end
@@ -31,8 +31,8 @@ csp-end
 assertion Movement does not refine Spec2 (a8)
 
 csp NoGasNoTermination csp-begin
-NoGas = gas.<(0,0)> -> NoGas
-NoGasNoTermination = ChemicalDetector_O(0) [| {|gas|} |] NoGas
+NoGas = gas.in.<(0,0)> -> NoGas
+NoGasNoTermination = ChemicalDetector_O [| {|gas|} |] NoGas
 csp-end
 
 assertion NoGasNoTermination is deadlock-free (a9)  

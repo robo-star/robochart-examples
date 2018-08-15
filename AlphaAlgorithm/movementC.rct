@@ -8,6 +8,7 @@ controller MovementC {
 	uses ObstacleHw
 	sref stm_ref0 = Movement
 	
-	connection stm_ref0 on neighbours to MovementC on neighbours
+	
 connection MovementC on obstacle to stm_ref0 on obstacle
+connection MovementC on neighbours to stm_ref0 on neighbours
 }

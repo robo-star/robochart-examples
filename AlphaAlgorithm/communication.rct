@@ -38,8 +38,11 @@ stm Communication {
 		from Receive
 		to Receive
 	trigger broadcast ? y
+		condition y != id
 		action 
-	send receive ! (| y , id |)
+	 
+	send 
+	receive ! (| y , id |)
 	}
 
 	transition t4 {

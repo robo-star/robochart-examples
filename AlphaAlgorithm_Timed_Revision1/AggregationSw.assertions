@@ -63,9 +63,9 @@ timed assertion AggregationSoftware is deadlock-free (a9_timed)
 
 csp Spec1 csp-begin
 Spec1 = let
-	Responds = (|~|x:ID @ receive.(Communication_id,x) -> Responds) |~| SKIP
-	Run = broadcast?x:diff(ID,{Communication_id}) -> receive!(x,Communication_id) -> Run |~| SKIP
-	Main = broadcast.Communication_id -> (Responds|||Run); Main
+	Responds = (|~|x:ID @ receive.in.(Communication_id,x) -> Responds) |~| SKIP
+	Run = broadcast.in?x:diff(ID,{Communication_id}) -> receive.out!(x,Communication_id) -> Run |~| SKIP
+	Main = broadcast.out.Communication_id -> (Responds|||Run); Main
 within
 	Main
 csp-end
@@ -82,7 +82,7 @@ untimed assertion Impl1 does not refine Spec1 (b1) [F]
 csp Spec2 csp-begin
 Spec2 = let
 Moves = moveCall -> moveRet -> (Moves |~| SKIP)
-Run = |~|x:Position @ obstacle.x -> Moves; Run
+Run = |~|x:Position @ obstacle.in.x -> Moves; Run
 within
 Moves; Run
 csp-end 
@@ -97,9 +97,9 @@ untimed assertion Impl2 does not refine Spec2 (b2) [F]
 timed csp TimedSpec1 csp-begin
 Timed(OneStep) {
 TimedSpec1 = let
-	Responds = (|~|x:ID @ EDeadline(receive.(Communication_id,x),0) ; Responds) |~| SKIP
-	Run = broadcast?x:diff(ID,{Communication_id}) -> EDeadline(receive.(x,Communication_id),0) ; Run |~| SKIP
-	Main = broadcast.Communication_id -> (Responds|||Run); Main
+	Responds = (|~|x:ID @ EDeadline(receive.in.(Communication_id,x),0) ; Responds) |~| SKIP
+	Run = broadcast.in?x:diff(ID,{Communication_id}) -> EDeadline(receive.out.(x,Communication_id),0) ; Run |~| SKIP
+	Main = broadcast.out.Communication_id -> (Responds|||Run); Main
 within
 	Main
 }
@@ -107,14 +107,14 @@ csp-end
 
 timed csp TimedImpl1 csp-begin
 Timed(OneStep) {
-	TimedImpl1 = timed_priority(timed::AggregationSoftware|\{|receive,broadcast|})
+	TimedImpl1 = timed_priority(timed::AggregationSoftware|\{|tock,receive,broadcast|})
 }
 csp-end
 
 timed csp TimedSpec2 csp-begin
 TimedSpec2 = let
 	Moves = EDeadline(moveCall,0) ; EDeadline(moveRet,0) ; (Moves |~| SKIP)
-	Run = |~|x:Position @ obstacle.x -> Moves; Run
+	Run = |~|x:Position @ obstacle.in.x -> Moves; Run
 within
 	Moves; Run
 csp-end
@@ -256,11 +256,11 @@ TB3 = CommunicationStateSpent(0,"Communication_Broadcast")
 csp-end
 
 timed csp TB4 csp-begin
-NoEvent = AnyOther({|broadcast.Communication_id|}) ; BroadcastHappened(0)
+NoEvent = AnyOther({|broadcast.in.Communication_id|}) ; BroadcastHappened(0)
 
-BroadcastHappened(t) = (t < Communication_RC & (broadcast ?x-> SomeHappened(t) 
+BroadcastHappened(t) = (t < Communication_RC & (broadcast.in?x-> SomeHappened(t) 
 											   [] 
-											   receive?x:{x|x <- {(Communication_id,x0) | x0 <- ID}} -> SomeHappened(t) 
+											   receive.in?x:{x|x <- {(Communication_id,x0) | x0 <- ID}} -> SomeHappened(t) 
 											   [] 
 											   tock -> BroadcastHappened(t+1)))
 						[]
