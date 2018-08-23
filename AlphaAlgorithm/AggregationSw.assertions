@@ -41,15 +41,15 @@ assertion AggregationSoftware is deadlock-free (a9)
 
 csp Spec1 csp-begin
 Spec1 = let
-Responds = (|~|x:ID @ receive.in.(Communication_id,x) -> Responds) |~| SKIP
-Run = broadcast.in?x:diff(ID,{Communication_id}) -> receive.out!(x,Communication_id) -> Run |~| SKIP
-Main = broadcast.out.Communication_id -> (Responds|||Run); Main
+Responds = (|~|x:ID @ AggregationSoftware_receive.in.(Communication_id,x) -> Responds) |~| SKIP
+Run = AggregationSoftware_broadcast.in?x:diff(ID,{Communication_id}) -> AggregationSoftware_receive.out!(x,Communication_id) -> Run |~| SKIP
+Main = AggregationSoftware_broadcast.out.Communication_id -> (Responds|||Run); Main
 within
 Main
 csp-end
 
 csp Impl1 csp-begin
-Impl1 = AggregationSoftware_O(0)\diff(Events,{|receive,broadcast|})
+Impl1 = AggregationSoftware_O(0)\diff(Events,{|AggregationSoftware_receive,AggregationSoftware_broadcast|})
 csp-end
 
 untimed assertion Impl1 refines Spec1 (b1) [F]
@@ -57,13 +57,13 @@ untimed assertion Impl1 refines Spec1 (b1) [F]
 csp Spec2 csp-begin
 Spec2 = let
 Moves = moveCall -> moveRet -> (Moves |~| SKIP)
-Run = |~|x:Position @ obstacle.in.x -> Moves; Run
+Run = |~|x:Position @ AggregationSoftware_obstacle.in.x -> Moves; Run
 within
 Moves; Run
 csp-end 
 
 csp Impl2 csp-begin
-Impl2 = AggregationSoftware_O(0)\diff(Events,{|moveCall,moveRet,obstacle|})
+Impl2 = AggregationSoftware_O(0)\diff(Events,{|moveCall,moveRet,AggregationSoftware_obstacle|})
 csp-end
 
 untimed assertion Impl2 refines Spec2 (b2) [F]
