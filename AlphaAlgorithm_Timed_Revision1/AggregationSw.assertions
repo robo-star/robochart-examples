@@ -63,15 +63,15 @@ timed assertion AggregationSoftware is deadlock-free (a9_timed)
 
 csp Spec1 csp-begin
 Spec1 = let
-	Responds = (|~|x:ID @ receive.in.(Communication_id,x) -> Responds) |~| SKIP
-	Run = broadcast.in?x:diff(ID,{Communication_id}) -> receive.out!(x,Communication_id) -> Run |~| SKIP
-	Main = broadcast.out.Communication_id -> (Responds|||Run); Main
+	Responds = (|~|x:ID @ AggregationSoftware_receive.in.(Communication_id,x) -> Responds) |~| SKIP
+	Run = AggregationSoftware_broadcast.in?x:diff(ID,{Communication_id}) -> AggregationSoftware_receive.out!(x,Communication_id) -> Run |~| SKIP
+	Main = AggregationSoftware_broadcast.out.Communication_id -> (Responds|||Run); Main
 within
 	Main
 csp-end
 
 csp Impl1 csp-begin
-Impl1 = AggregationSoftware_O(0)\diff(Events,{|receive,broadcast|})
+Impl1 = AggregationSoftware_O(0)\diff(Events,{|AggregationSoftware_receive,AggregationSoftware_broadcast|})
 csp-end
 
 /* This won't refine because in the untimed model the timed transitions
@@ -82,13 +82,13 @@ untimed assertion Impl1 does not refine Spec1 (b1) [F]
 csp Spec2 csp-begin
 Spec2 = let
 Moves = moveCall -> moveRet -> (Moves |~| SKIP)
-Run = |~|x:Position @ obstacle.in.x -> Moves; Run
+Run = |~|x:Position @ AggregationSoftware_obstacle.in.x -> Moves; Run
 within
 Moves; Run
 csp-end 
 
 csp Impl2 csp-begin
-Impl2 = AggregationSoftware_O(0)\diff(Events,{|moveCall,moveRet,obstacle|})
+Impl2 = AggregationSoftware_O(0)\diff(Events,{|moveCall,moveRet,AggregationSoftware_obstacle|})
 csp-end
 
 /* Similarly to the reason for the above, this does not refine */
@@ -97,9 +97,9 @@ untimed assertion Impl2 does not refine Spec2 (b2) [F]
 timed csp TimedSpec1 csp-begin
 Timed(OneStep) {
 TimedSpec1 = let
-	Responds = (|~|x:ID @ EDeadline(receive.in.(Communication_id,x),0) ; Responds) |~| SKIP
-	Run = broadcast.in?x:diff(ID,{Communication_id}) -> EDeadline(receive.out.(x,Communication_id),0) ; Run |~| SKIP
-	Main = broadcast.out.Communication_id -> (Responds|||Run); Main
+	Responds = (|~|x:ID @ EDeadline(AggregationSoftware_receive.in.(Communication_id,x),0) ; Responds) |~| SKIP
+	Run = AggregationSoftware_broadcast.in?x:diff(ID,{Communication_id}) -> EDeadline(AggregationSoftware_receive.out.(x,Communication_id),0) ; Run |~| SKIP
+	Main = AggregationSoftware_broadcast.out.Communication_id -> (Responds|||Run); Main
 within
 	Main
 }
@@ -107,21 +107,21 @@ csp-end
 
 timed csp TimedImpl1 csp-begin
 Timed(OneStep) {
-	TimedImpl1 = timed_priority(timed::AggregationSoftware(0)|\{|tock,receive,broadcast|})
+	TimedImpl1 = timed_priority(timed::AggregationSoftware(0)|\{|tock,AggregationSoftware_receive,AggregationSoftware_broadcast|})
 }
 csp-end
 
 timed csp TimedSpec2 csp-begin
 TimedSpec2 = let
 	Moves = EDeadline(moveCall,0) ; EDeadline(moveRet,0) ; (Moves |~| SKIP)
-	Run = |~|x:Position @ obstacle.in.x -> Moves; Run
+	Run = |~|x:Position @ AggregationSoftware_obstacle.in.x -> Moves; Run
 within
 	Moves; Run
 csp-end
 
 timed csp TimedImpl2 csp-begin
 Timed(OneStep) {
-	TimedImpl2 = timed_priority(timed::AggregationSoftware(0)|\{|moveCall,moveRet,obstacle|})
+	TimedImpl2 = timed_priority(timed::AggregationSoftware(0)|\{|moveCall,moveRet,AggregationSoftware_obstacle|})
 }
 csp-end
 
@@ -166,7 +166,7 @@ timed assertion T_Communication_WithoutDeadlines refines T_A1_C (Timed_TA1_C_NoD
 timed assertion T_IdealCommunication_WithoutDeadlines refines T_A1_C (Timed_TA1_C_Ideal_NoDeadlines)
 
 timed csp T_AggregationSoftware_WithoutDeadlines csp-begin
-TA_ExternalEvents_AggregationSoftware_WithoutDeadlines = {|obstacle|}
+TA_ExternalEvents_AggregationSoftware_WithoutDeadlines = {|AggregationSoftware_obstacle|}
 
 T_AggregationSoftware_WithoutDeadlines = prioritise(timed::AggregationSoftware(0) |\ union(TA_ExternalEvents_AggregationSoftware_WithoutDeadlines,{tock}),<{},{tock}>)
 csp-end
@@ -174,9 +174,9 @@ csp-end
 timed csp T_IdealAggregationSoftware_WithoutDeadlines csp-begin
 
 -- At most a broadcast followed by a receive, or a receive, per time unit.
-OfferBroadcastOrReceive = (broadcast?x -> receive?x -> SKIP ||| receive?x -> SKIP) /\ tock -> OfferBroadcastOrReceive
+OfferBroadcastOrReceive = (AggregationSoftware_broadcast?x -> AggregationSoftware_receive?x -> SKIP ||| AggregationSoftware_receive?x -> SKIP) /\ tock -> OfferBroadcastOrReceive
 
-TA_IdealSoftware = timed::AggregationSoftware(0) [| {|tock, broadcast, receive|} |] OfferBroadcastOrReceive
+TA_IdealSoftware = timed::AggregationSoftware(0) [| {|tock, AggregationSoftware_broadcast, AggregationSoftware_receive|} |] OfferBroadcastOrReceive
 
 T_IdealAggregationSoftware_WithoutDeadlines = prioritise(TA_IdealSoftware |\ union(TA_ExternalEvents_AggregationSoftware_WithoutDeadlines,{tock}),<{},{tock}>)
 csp-end
@@ -256,11 +256,11 @@ TB3 = CommunicationStateSpent(0,"Communication_Broadcast")
 csp-end
 
 timed csp TB4 csp-begin
-NoEvent = AnyOther({|broadcast.in.Communication_id|}) ; BroadcastHappened(0)
+NoEvent = AnyOther({|AggregationSoftware_broadcast.in.Communication_id|}) ; BroadcastHappened(0)
 
-BroadcastHappened(t) = (t < Communication_RC & (broadcast.in?x-> SomeHappened(t) 
+BroadcastHappened(t) = (t < Communication_RC & (AggregationSoftware_broadcast.in?x-> SomeHappened(t) 
 											   [] 
-											   receive.in?x:{x|x <- {(Communication_id,x0) | x0 <- ID}} -> SomeHappened(t) 
+											   AggregationSoftware_receive.in?x:{x|x <- {(Communication_id,x0) | x0 <- ID}} -> SomeHappened(t) 
 											   [] 
 											   tock -> BroadcastHappened(t+1)))
 						[]
@@ -270,7 +270,7 @@ SomeHappened(t) = t < Communication_RC & (AnyOther({tock}) ; SomeHappened(t+1))
 				  []
 				  t == Communication_RC & NoEvent
 
-TB4 = CHAOS({|moveCall,moveRet,obstacle,tock|}) [| {tock} |] NoEvent
+TB4 = CHAOS({|moveCall,moveRet,AggregationSoftware_obstacle,tock|}) [| {tock} |] NoEvent
 csp-end
 
 timed csp TB5 csp-begin
