@@ -31,8 +31,8 @@ csp-end
 assertion Movement does not refine Spec2 (a8)
 
 csp NoGasNoTermination csp-begin
-NoGas = gas.in.<(0,0)> -> NoGas
-NoGasNoTermination = ChemicalDetector_O(0) [| {|gas|} |] NoGas
+NoGas = ChemicalDetector_gas.in.<(0,0)> -> NoGas
+NoGasNoTermination = ChemicalDetector_O(0) [| {|ChemicalDetector_gas|} |] NoGas
 csp-end
 
 assertion NoGasNoTermination is deadlock-free (a9)  
