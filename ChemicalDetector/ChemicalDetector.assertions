@@ -19,30 +19,30 @@ csp-end
 assertion Detecting is not deterministic (a1)
 
 csp OnlyCommands csp-begin
-OnlyCommands = ChemicalDetectorSoftware_O(0) [|{|gas,light|}|] STOP
+OnlyCommands = ChemicalDetectorSoftware_O(0) [|{|ChemicalDetectorSoftware_gas,ChemicalDetectorSoftware_light|}|] STOP
 csp-end
 
 assertion OnlyCommands is deadlock-free (a2)
 
 csp OnlyGasAndLight csp-begin
-OnlyGasAndLight = ChemicalDetectorSoftware_O(0) [|{|cd|}|] STOP
+OnlyGasAndLight = ChemicalDetectorSoftware_O(0) [|{|ChemicalDetectorSoftware_cd|}|] STOP
 csp-end
 
 assertion OnlyGasAndLight is deadlock-free (a3)
 
 csp Spec1 csp-begin
-Commands = cd.in?x -> (|~|e: {|turn.out,incrCall,decrCall|} @ e -> Commands)
-Init = light.out.green -> SKIP ||| gas.in -> SKIP
+Commands = ChemicalDetectorSoftware_cd.in?x -> (|~|e: {|ChemicalDetectorSoftware_turn.out,incrCall,decrCall|} @ e -> Commands)
+Init = ChemicalDetectorSoftware_light.out.green -> SKIP ||| ChemicalDetectorSoftware_gas.in -> SKIP
 GasLight = let
   T = (
-    gas.in -> SKIP
+    ChemicalDetectorSoftware_gas.in -> SKIP
     |||
     (
-      light.out.red -> siren.out -> flag.out -> SKIP
+      ChemicalDetectorSoftware_light.out.red -> ChemicalDetectorSoftware_siren.out -> ChemicalDetectorSoftware_flag.out -> SKIP
       |~|
-      light.out.green -> SKIP
+      ChemicalDetectorSoftware_light.out.green -> SKIP
       |~|
-      light.out.amber -> SKIP
+      ChemicalDetectorSoftware_light.out.amber -> SKIP
     )
   ); T
 within
