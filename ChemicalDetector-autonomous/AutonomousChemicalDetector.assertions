@@ -9,12 +9,12 @@ assertion ChemicalDetector terminates (a6)
 
 csp Spec1 csp-begin
 Spec1 = GasAnalysis_gas.in?x -> (|~|e:{|GasAnalysis_resume, GasAnalysis_stop, GasAnalysis_turn|} @ e->Spec1)
-        |~|
+        |~| 
         SKIP
 csp-end
-
-csp Impl1 csp-begin
-Impl1 = GasAnalysis_O(0)\{|GasAnalysis_terminate|}
+ 
+csp Impl1 csp-begin   
+Impl1 = GasAnalysis_O(0,2)\{|GasAnalysis_terminate|}
 csp-end
 
 assertion Impl1 refines Spec1 (a7)
@@ -61,16 +61,16 @@ aux(gs,0)
 
 goreq(x,y) = x >= y
 
-angle(x) = if (x > 0) then Right else Front
+angle(x) = if (x > 0) then Chemical_Angle_Right else Chemical_Angle_Front
 
 location(gs) = let
-aux(<>,max,n) = Front
+aux(<>,max,n) = Chemical_Angle_Front
 aux(<g>^gs,max,n) = if GasSensor_i(g) == max then angle(n) else aux(gs,max,n+1)
 within
 aux(gs,intensity(gs),0)
 
-analysis(<>) = noGas
-analysis(<g>^gs) = if (analysis(gs) == noGas and GasSensor_c(g) == 0) then noGas else gasD
+analysis(<>) = Chemical_Status_noGas
+analysis(<g>^gs) = if (analysis(gs) == Chemical_Status_noGas and GasSensor_c(g) == 0) then Chemical_Status_noGas else Chemical_Status_gasD
 
 GasAnalysis_thr = 1
 nametype nat = {0..2}

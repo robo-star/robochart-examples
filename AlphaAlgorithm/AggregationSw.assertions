@@ -24,7 +24,7 @@ Modulus(e1,e2,T) = if member(e1%e2,T) then e1%e2 else e1
 Minus(e1,e2,T) = if member(e1-e2,T) then e1-e2 else e1
 csp-end
 
-import aggregation::*
+import aggregation::* 
 
 assertion Communication is not deterministic (a1)
 assertion Communication is divergence-free (a2)
@@ -37,7 +37,7 @@ assertion Movement is deadlock-free (a6)
 assertion AggregationSoftware is not deterministic (a7)
 assertion AggregationSoftware is divergence-free (a8)
 assertion AggregationSoftware is deadlock-free (a9)
-
+  
 
 csp Spec1 csp-begin
 Spec1 = let

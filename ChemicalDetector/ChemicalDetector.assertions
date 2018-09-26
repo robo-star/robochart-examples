@@ -32,17 +32,17 @@ assertion OnlyGasAndLight is deadlock-free (a3)
 
 csp Spec1 csp-begin
 Commands = ChemicalDetectorSoftware_cd.in?x -> (|~|e: {|ChemicalDetectorSoftware_turn.out,incrCall,decrCall|} @ e -> Commands)
-Init = ChemicalDetectorSoftware_light.out.green -> SKIP ||| ChemicalDetectorSoftware_gas.in -> SKIP
+Init = ChemicalDetectorSoftware_light.out.Color_green -> SKIP ||| ChemicalDetectorSoftware_gas.in -> SKIP
 GasLight = let
   T = (
     ChemicalDetectorSoftware_gas.in -> SKIP
     |||
     (
-      ChemicalDetectorSoftware_light.out.red -> ChemicalDetectorSoftware_siren.out -> ChemicalDetectorSoftware_flag.out -> SKIP
+      ChemicalDetectorSoftware_light.out.Color_red -> ChemicalDetectorSoftware_siren.out -> ChemicalDetectorSoftware_flag.out -> SKIP
       |~|
-      ChemicalDetectorSoftware_light.out.green -> SKIP
+      ChemicalDetectorSoftware_light.out.Color_green -> SKIP
       |~|
-      ChemicalDetectorSoftware_light.out.amber -> SKIP
+      ChemicalDetectorSoftware_light.out.Color_amber -> SKIP
     )
   ); T
 within

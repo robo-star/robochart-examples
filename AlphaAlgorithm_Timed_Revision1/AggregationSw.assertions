@@ -142,7 +142,7 @@ assertion AggregationSoftware is not timelock-free (Timed_TA1_A)
 timed csp T_Communication_WithoutDeadlines csp-begin
 TA_ExternalEvents_Communication_WithoutDeadlines = {|Communication_robots|}
 
-T_Communication_WithoutDeadlines = prioritise(timed::Communication(0) |\ union(TA_ExternalEvents_Communication_WithoutDeadlines,{tock}),<{},{tock}>)
+T_Communication_WithoutDeadlines = prioritise(timed::Communication(0,Communication_id,Communication_RC) |\ union(TA_ExternalEvents_Communication_WithoutDeadlines,{tock}),<{},{tock}>)
 csp-end
 
 /* The verification for timelock freedom, which is essentially what we are doing here,
@@ -153,7 +153,7 @@ timed csp T_IdealCommunication_WithoutDeadlines csp-begin
 -- At most a broadcast followed by a receive, or a receive, per time unit.
 Communication_OfferBroadcastOrReceive = (Communication_broadcast?x -> Communication_receive?x -> SKIP ||| Communication_receive?x -> SKIP) /\ tock -> Communication_OfferBroadcastOrReceive
 
-TA_IdealCommunication = timed::Communication(0) [| {|Communication_broadcast, Communication_receive, tock|} |] Communication_OfferBroadcastOrReceive
+TA_IdealCommunication = timed::Communication(0,Communication_id,Communication_RC) [| {|Communication_broadcast, Communication_receive, tock|} |] Communication_OfferBroadcastOrReceive
 T_IdealCommunication_WithoutDeadlines = prioritise(TA_IdealCommunication |\ union(TA_ExternalEvents_Communication_WithoutDeadlines,{tock}),<{},{tock}>)
 
 csp-end

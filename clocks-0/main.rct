@@ -19,7 +19,6 @@ module M {
 	rref rp_ref0 = rp0
 connection ctrl_ref0 on term to rp_ref0 on term ( _async )
 }
-type xs
 controller ctrl0 {
 	stm stm0 {
 		uses IEvents
