@@ -33,10 +33,7 @@ untimed assertion Communication is not deterministic (a1)
 timed assertion Communication is deterministic (a1_timed)
 assertion Communication is divergence-free (a2)
 
-/* Not deadlock free in this model because all transitions have timed conditions, and
- * as such they are not guaranteed to be available in the untimed CSP model. However
- * it should be deadlock free in the timed model. */
-untimed assertion Communication is not deadlock-free (a3)
+untimed assertion Communication is deadlock-free (a3)
 timed assertion Communication is deadlock-free (a3_timed)
 
 /* It is deterministic in the timed model as is because an accurate and non-deterministic
@@ -47,8 +44,7 @@ untimed assertion Movement is not deterministic (a4)
 timed assertion Movement is deterministic (a4_timed)
 assertion Movement is divergence-free (a5)
 
-/* Not deadlock free in this model for the same reason as above */
-untimed assertion Movement is not deadlock-free (a6)
+untimed assertion Movement is deadlock-free (a6)
 timed assertion Movement is deadlock-free (a6_timed)
 
 /* See above for determinism */
@@ -56,8 +52,7 @@ untimed assertion AggregationSoftware is not deterministic (a7)
 timed assertion AggregationSoftware is deterministic (a7_timed)
 assertion AggregationSoftware is divergence-free (a8)
 
-/* Not deadlock free in this model for the same reason as above */
-untimed assertion AggregationSoftware is not deadlock-free (a9)
+untimed assertion AggregationSoftware is deadlock-free (a9)
 timed assertion AggregationSoftware is deadlock-free (a9_timed)
 
 
@@ -74,9 +69,8 @@ csp Impl1 csp-begin
 Impl1 = AggregationSoftware_O(0)\diff(Events,{|AggregationSoftware_receive,AggregationSoftware_broadcast|})
 csp-end
 
-/* This won't refine because in the untimed model the timed transitions
- * can include STOP, and so it is possible for AggregationSoftware to 
- * deadlock */
+/* This won't refine because in the untimed model the condition of the timed transitions
+ * are ignored and this introduces behaviours that are not allowed by the specification */
 untimed assertion Impl1 does not refine Spec1 (b1) [F]
 
 csp Spec2 csp-begin
@@ -91,8 +85,7 @@ csp Impl2 csp-begin
 Impl2 = AggregationSoftware_O(0)\diff(Events,{|moveCall,moveRet,AggregationSoftware_obstacle|})
 csp-end
 
-/* Similarly to the reason for the above, this does not refine */
-untimed assertion Impl2 does not refine Spec2 (b2) [F]
+untimed assertion Impl2 refines Spec2 (b2) [F]
 
 timed csp TimedSpec1 csp-begin
 Timed(OneStep) {
