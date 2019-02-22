@@ -11,10 +11,5 @@ timed assertion ctrl0::stm0 is not deterministic (R5)
 timed assertion ctrl0 is not deterministic (R6)
 timed assertion M is not deterministic (R7)
 
-/* Deterministic because of the untimed semantics ignores the non-deterministic wait. */
-untimed assertion ctrl0::stm0 is deterministic (R8)
-untimed assertion ctrl0 is deterministic (R9)
-untimed assertion M is deterministic (R10)
-
 /* The transition from s0 to s1 depends on C, which has not been reset at least once. */
 assertion clock ctrl0::stm0::C is not initialised (C1)

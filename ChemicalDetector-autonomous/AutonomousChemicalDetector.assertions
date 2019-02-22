@@ -1,7 +1,15 @@
+// I had to add the import and the interface to force xtext to
+// load the Location resource, and find the definition of changeLocation.
+// I tried to find a way of forcing the loading of the resource, but haven't
+// yet found a solution. I think I need to find a way of loading all source files.
+
+import Location::*
+interface I11 { var a: Loc } 
+
 assertion GasAnalysis is deterministic (a1)
 assertion GasAnalysis is divergence-free (a2)
 assertion GasAnalysis terminates (a3)
-
+ 
 assertion Movement is divergence-free (a4)
 assertion Movement terminates (a5)
 
@@ -9,12 +17,12 @@ assertion ChemicalDetector terminates (a6)
 
 csp Spec1 csp-begin
 Spec1 = GasAnalysis_gas.in?x -> (|~|e:{|GasAnalysis_resume, GasAnalysis_stop, GasAnalysis_turn|} @ e->Spec1)
-        |~| 
+        |~|
         SKIP
-csp-end
- 
-csp Impl1 csp-begin   
-Impl1 = GasAnalysis_O(0,2)\{|GasAnalysis_terminate|}
+csp-end 
+
+csp Impl1 csp-begin
+Impl1 = GasAnalysis_O(0,GasAnalysis_thr)\{|GasAnalysis_terminate|}
 csp-end
 
 assertion Impl1 refines Spec1 (a7)
@@ -28,14 +36,14 @@ within
 Init ||| T
 csp-end
 
-assertion Movement does not refine Spec2 (a8)
+assertion Movement does not refine Spec2 (a8) 
 
 csp NoGasNoTermination csp-begin
 NoGas = ChemicalDetector_gas.in.<(0,0)> -> NoGas
 NoGasNoTermination = ChemicalDetector_O(0) [| {|ChemicalDetector_gas|} |] NoGas
 csp-end
 
-assertion NoGasNoTermination is deadlock-free (a9)  
+assertion NoGasNoTermination is deadlock-free (a9)   
 
 // every state is reachable
 assertion Movement::Waiting is reachable in ChemicalDetector (a10)
@@ -47,13 +55,13 @@ assertion Movement::AvoidingAgain is reachable in ChemicalDetector (a15)
 assertion Movement::GettingOut is reachable in ChemicalDetector (a16)
 
 assertion GasAnalysis::NoGas is reachable in ChemicalDetector (a17)
-assertion GasAnalysis::Analysis is reachable in ChemicalDetector (a18)
+assertion GasAnalysis::Analysis is reachable in ChemicalDetector (a18) 
 assertion GasAnalysis::GasDetected is reachable in ChemicalDetector (a19)
 assertion GasAnalysis::Reading is reachable in ChemicalDetector (a20)
 
 csp Instantiations csp-begin
 
-intensity(gs) = let 
+intensity(gs) = let  
 aux(<>,max) = max
 aux(<g>^gs,max) = if GasSensor_i(g) > max then aux(gs,GasSensor_i(g)) else aux(gs,max)
 within
