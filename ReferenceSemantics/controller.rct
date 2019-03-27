@@ -1,0 +1,70 @@
+diagram new_file
+
+controller ctrl0 {
+	event in1
+	event out1
+	event out2
+	sref stm_ref0 = stm1
+	sref stm_ref1 = stm1
+	connection ctrl0 on in1 to stm_ref0 on a
+	connection stm_ref0 on b to stm_ref2 on e
+	connection stm_ref1 on b to stm_ref2 on f
+event in2
+	
+	
+	connection ctrl0 on in2 to stm_ref1 on a
+sref stm_ref2 = stm0
+	connection stm_ref2 on g to ctrl0 on out1
+	connection stm_ref2 on h to ctrl0 on out2
+}
+stm stm0 {
+	event e
+	event f
+	initial i0
+	state s0 {
+	}
+	transition t0 {
+		from i0
+		to s0
+	}
+	transition t1 {
+		from s0
+		to s0
+		trigger f
+		action h
+	}
+event g
+	event h
+	transition t2 {
+		from s0
+		to s0
+		trigger e
+		action g
+	}
+}
+stm stm1 {
+	event a
+	event b
+	initial i0
+	state s0 {
+	}
+	transition t0 {
+		from i0
+		to s0
+	}
+	transition t1 {
+		from s1
+		to s1
+		trigger a
+		action b
+	}
+
+	
+	state s1 {
+	}
+	transition t2 {
+		from s0
+		to s1
+		}
+var x : nat
+}

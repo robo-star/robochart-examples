@@ -1,0 +1,15 @@
+assertion A1: stm0 is deadlock-free
+assertion A2: stm0 is deterministic
+assertion A3: stm0 is divergence-free
+
+assertion B1: stm1 is deadlock-free
+assertion B2: stm1 is deterministic
+assertion B3: stm1 is divergence-free
+
+assertion C1: ctrl0 is deadlock-free
+assertion C2: ctrl0 is not deterministic
+assertion C3: ctrl0 is divergence-free
+
+assertion D1: mod0 is deadlock-free
+assertion D2: mod0 is not deterministic
+assertion D3: mod0 is divergence-free

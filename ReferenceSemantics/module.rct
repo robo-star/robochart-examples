@@ -1,0 +1,15 @@
+diagram M
+module mod0 {
+	connection ctrl_ref0 on out1 to rp0 on w ( _async )
+	connection ctrl_ref0 on out2 to rp0 on z ( _async )
+	connection rp0 on u to ctrl_ref0 on in1 ( _async )
+	connection rp0 on y to ctrl_ref0 on in2 ( _async )
+	robotic platform rp0 {
+		event u
+		
+		event w
+		event z
+		event y
+	}
+	cref ctrl_ref0 = ctrl0
+}
