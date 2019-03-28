@@ -1,0 +1,3 @@
+untimed assertion A1: test is not deadlock-free with constants P set to 1 and x set to 1
+timed assertion A2: test is deadlock-free with constants P set to 1 and x set to 1
+assertion B: test is deterministic with constants P set to 1 and x set to 1    

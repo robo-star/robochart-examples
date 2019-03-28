@@ -1,0 +1,21 @@
+diagram new_file operation test( x : int) {
+	requires C
+var a : Seq( int )
+var p: int*int
+	event ev : Seq( int )
+	event se: Seq(int*int)
+	initial i0
+	state s0 {
+		
+	entry a = < x , 2 > ; ev ! a ; a [ 1 ] = 2 ; ev ! a; p = f((|1,2|)); se!<(|1,2|),p>
+	}
+	transition t0 {
+		from i0
+		to s0
+	}
+}
+interface C {
+	const P : int
+}
+function f(x: int*int): int*int {
+}
