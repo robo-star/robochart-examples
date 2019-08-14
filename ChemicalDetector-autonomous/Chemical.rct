@@ -21,7 +21,7 @@ function intensity( gs : Seq( GasSensor )) : Intensity {
 	precondition size ( gs ) > 0
 	postcondition forall x : nat | 0 <= x /\ x <= size ( gs ) @ goreq ( result ,
 	gs [ x ] . i )
-	postcondition exists y: nat | 0 <= y /\ x <= size (gs) @ result == gs[x].i
+	postcondition exists y: nat | 0 <= y /\ y <= size (gs) @ result == gs[y].i
 }
 function location( gs : Seq( GasSensor )) : Angle {
 	precondition size ( gs ) > 0

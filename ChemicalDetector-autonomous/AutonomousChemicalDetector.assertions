@@ -4,16 +4,15 @@
 // yet found a solution. I think I need to find a way of loading all source files.
 
 import Location::*
-interface I11 { var a: Loc } 
 
-assertion GasAnalysis is deterministic (a1)
-assertion GasAnalysis is divergence-free (a2)
-assertion GasAnalysis terminates (a3)
+assertion a1: GasAnalysis is deterministic
+assertion a2: GasAnalysis is divergence-free
+assertion a3: GasAnalysis terminates
  
-assertion Movement is divergence-free (a4)
-assertion Movement terminates (a5)
+assertion a4: Movement is divergence-free
+assertion a5: Movement terminates
 
-assertion ChemicalDetector terminates (a6)
+assertion a6: ChemicalDetector terminates
 
 csp Spec1 csp-begin
 Spec1 = GasAnalysis_gas.in?x -> (|~|e:{|GasAnalysis_resume, GasAnalysis_stop, GasAnalysis_turn|} @ e->Spec1)
@@ -25,7 +24,7 @@ csp Impl1 csp-begin
 Impl1 = GasAnalysis_O(0,GasAnalysis_thr)\{|GasAnalysis_terminate|}
 csp-end
 
-assertion Impl1 refines Spec1 (a7)
+assertion a7: Impl1 refines Spec1
 
 csp Spec2 csp-begin
 Spec2 = let
@@ -36,28 +35,28 @@ within
 Init ||| T
 csp-end
 
-assertion Movement does not refine Spec2 (a8) 
+assertion a8: Movement does not refine Spec2 
 
 csp NoGasNoTermination csp-begin
 NoGas = ChemicalDetector_gas.in.<(0,0)> -> NoGas
 NoGasNoTermination = ChemicalDetector_O(0) [| {|ChemicalDetector_gas|} |] NoGas
 csp-end
 
-assertion NoGasNoTermination is deadlock-free (a9)   
+assertion a9: NoGasNoTermination is deadlock-free
 
 // every state is reachable
-assertion Movement::Waiting is reachable in ChemicalDetector (a10)
-assertion Movement::Going is reachable in ChemicalDetector (a11)
-assertion Movement::Found is reachable in ChemicalDetector (a12)
-assertion Movement::Avoiding is reachable in ChemicalDetector (a13)
-assertion Movement::TryingAgain is reachable in ChemicalDetector (a14)
-assertion Movement::AvoidingAgain is reachable in ChemicalDetector (a15)
-assertion Movement::GettingOut is reachable in ChemicalDetector (a16)
+assertion a10: Movement::Waiting is reachable in ChemicalDetector
+assertion a11: Movement::Going is reachable in ChemicalDetector
+assertion a12: Movement::Found is reachable in ChemicalDetector
+assertion a13: Movement::Avoiding is reachable in ChemicalDetector
+assertion a14: Movement::TryingAgain is reachable in ChemicalDetector
+assertion a15: Movement::AvoidingAgain is reachable in ChemicalDetector
+assertion a16: Movement::GettingOut is reachable in ChemicalDetector
 
-assertion GasAnalysis::NoGas is reachable in ChemicalDetector (a17)
-assertion GasAnalysis::Analysis is reachable in ChemicalDetector (a18) 
-assertion GasAnalysis::GasDetected is reachable in ChemicalDetector (a19)
-assertion GasAnalysis::Reading is reachable in ChemicalDetector (a20)
+assertion a17: GasAnalysis::NoGas is reachable in ChemicalDetector
+assertion a18: GasAnalysis::Analysis is reachable in ChemicalDetector
+assertion a19: GasAnalysis::GasDetected is reachable in ChemicalDetector
+assertion a20: GasAnalysis::Reading is reachable in ChemicalDetector
 
 csp Instantiations csp-begin
 
