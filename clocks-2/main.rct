@@ -42,7 +42,7 @@ controller ctrl0 {
 				trigger
 			}
 			 
-		}
+		} 
 		
 		transition t0 {
 			from i0

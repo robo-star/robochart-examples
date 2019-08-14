@@ -1,7 +1,7 @@
 
 /* The state machine does not terminate.  */
-timed assertion ctrl0::stm0 is deadlock-free (R1)
-assertion ctrl0::stm0 does not terminate (R2)
+timed assertion R1: ctrl0::stm0 is deadlock-free
+assertion R2: ctrl0::stm0 does not terminate
 
 /* Clock is not initialised before the transition from s0 to s1. */
-assertion clock ctrl0::stm0::C is not initialised (C1)
+assertion C1: clock ctrl0::stm0::C is not initialised
