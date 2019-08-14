@@ -41,12 +41,13 @@ stm Moving {
 		condition c == Command::faster
 		action incr()
 	}
-transition t6 {
+	transition t6 {
 		from Waiting
 		to Waiting
 		trigger cd ? c
 		condition c == Command::slower
 		action decr()
 	}
-var c : Command
+	var c : Command
 }
+

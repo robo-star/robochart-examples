@@ -16,19 +16,19 @@ Modulus(e1,e2,T) = if member(e1%e2,T) then e1%e2 else e1
 Minus(e1,e2,T) = if member(e1-e2,T) then e1-e2 else e1
 csp-end
 
-assertion Detecting is not deterministic (a1)
+assertion a1: Detecting is not deterministic
 
 csp OnlyCommands csp-begin
 OnlyCommands = ChemicalDetectorSoftware_O(0) [|{|ChemicalDetectorSoftware_gas,ChemicalDetectorSoftware_light|}|] STOP
 csp-end
 
-assertion OnlyCommands is deadlock-free (a2)
+assertion a2: OnlyCommands is deadlock-free
 
 csp OnlyGasAndLight csp-begin
 OnlyGasAndLight = ChemicalDetectorSoftware_O(0) [|{|ChemicalDetectorSoftware_cd|}|] STOP
 csp-end
 
-assertion OnlyGasAndLight is deadlock-free (a3)
+assertion a3: OnlyGasAndLight is deadlock-free
 
 csp Spec1 csp-begin
 Commands = ChemicalDetectorSoftware_cd.in?x -> (|~|e: {|ChemicalDetectorSoftware_turn.out,incrCall,decrCall|} @ e -> Commands)
@@ -54,7 +54,7 @@ csp Impl1 csp-begin
 Impl1 = ChemicalDetectorSoftware_O(0)\{|incrRet,decrRet|}
 csp-end
 
-assertion Impl1 refines Spec1 (a4)
+assertion a4: Impl1 refines Spec1
 
-assertion ChemicalDetectorSoftware is deadlock-free (a5)
-assertion ChemicalDetectorSoftware is divergence-free (a6)
+assertion a5: ChemicalDetectorSoftware is deadlock-free
+assertion a6: ChemicalDetectorSoftware is divergence-free

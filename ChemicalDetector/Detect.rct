@@ -33,9 +33,3 @@ event detect : Chemical
 		trigger action { 2 }> detect . Chemical::danger <{ 1 }
 	}
 }
-
-label statement {0}> skip <{0} incontext Detecting
-label statement skip <{0} ; skip <{0} incontext Detecting
-label statement (skip; skip) <{0} incontext Detecting
-label statement {0}>skip ; {2}>skip incontext Detecting
-label statement skip ; {0}> (skip; skip) incontext Detecting
