@@ -1,4 +1,3 @@
-
 csp Instantiations csp-begin
 nametype nat = {0..4}
 Movement_alpha = 1
@@ -29,31 +28,31 @@ import aggregation::*
 /* Because timed transitions are not deterministic in the timed model the following is
  * expected to be not deterministic in the untimed model, but deterministic in the timed
  * model */
-untimed assertion Communication is not deterministic (a1)
-timed assertion Communication is deterministic (a1_timed)
-assertion Communication is divergence-free (a2)
+untimed assertion a1: Communication is not deterministic
+timed assertion a1_timed: Communication is deterministic
+assertion a2: Communication is divergence-free
 
-untimed assertion Communication is deadlock-free (a3)
-timed assertion Communication is deadlock-free (a3_timed)
+untimed assertion a3: Communication is deadlock-free
+timed assertion a3_timed: Communication is deadlock-free
 
 /* It is deterministic in the timed model as is because an accurate and non-deterministic
  * definition of random() cannot be generated automatically. Because the transitions are
  * otherwhise themselves deterministic the resulting model is deterministic in the timed
  * model */ 
-untimed assertion Movement is not deterministic (a4)
-timed assertion Movement is deterministic (a4_timed)
-assertion Movement is divergence-free (a5)
+untimed assertion a4: Movement is not deterministic
+timed assertion a4_timed: Movement is deterministic
+assertion a5: Movement is divergence-free
 
-untimed assertion Movement is deadlock-free (a6)
-timed assertion Movement is deadlock-free (a6_timed)
+untimed assertion a6: Movement is deadlock-free
+timed assertion a6_timed: Movement is deadlock-free
 
 /* See above for determinism */
-untimed assertion AggregationSoftware is not deterministic (a7)
-timed assertion AggregationSoftware is deterministic (a7_timed)
-assertion AggregationSoftware is divergence-free (a8)
+untimed assertion a7: AggregationSoftware is not deterministic
+timed assertion a7_timed: AggregationSoftware is deterministic
+assertion a8: AggregationSoftware is divergence-free
 
-untimed assertion AggregationSoftware is deadlock-free (a9)
-timed assertion AggregationSoftware is deadlock-free (a9_timed)
+untimed assertion a9: AggregationSoftware is deadlock-free
+timed assertion a9_timed: AggregationSoftware is deadlock-free
 
 
 csp Spec1 csp-begin
@@ -71,7 +70,7 @@ csp-end
 
 /* This won't refine because in the untimed model the condition of the timed transitions
  * are ignored and this introduces behaviours that are not allowed by the specification */
-untimed assertion Impl1 does not refine Spec1 (b1) [F]
+untimed assertion b1: Impl1 does not refine Spec1 in the failures model
 
 csp Spec2 csp-begin
 Spec2 = let
@@ -85,7 +84,7 @@ csp Impl2 csp-begin
 Impl2 = AggregationSoftware_O(0)\diff(Events,{|moveCall,moveRet,AggregationSoftware_obstacle|})
 csp-end
 
-untimed assertion Impl2 refines Spec2 (b2) [F]
+untimed assertion b2: Impl2 refines Spec2 in the failures model
 
 timed csp TimedSpec1 csp-begin
 Timed(OneStep) {
@@ -118,18 +117,18 @@ Timed(OneStep) {
 }
 csp-end
 
-timed assertion TimedImpl1 refines TimedSpec1 (Timed_B1) [F]
-timed assertion TimedImpl2 refines TimedSpec2 (Timed_B2) [F]
+timed assertion Timed_B1: TimedImpl1 refines TimedSpec1 in the failures model
+timed assertion Timed_B2: TimedImpl2 refines TimedSpec2 in the failures model
 
 /******************************************************************************
  * TA Requirements.
  ******************************************************************************/
 
-assertion Movement is not timelock-free (Timed_TA1_M)
+assertion Timed_TA1_M: Movement is not timelock-free
 
 /* Not timelock free because of deadlines! */
-assertion Communication is not timelock-free (Timed_TA1_C)
-assertion AggregationSoftware is not timelock-free (Timed_TA1_A)
+assertion Timed_TA1_C: Communication is not timelock-free
+assertion Timed_TA1_A: AggregationSoftware is not timelock-free
 
 /* Instead can define different processes that hide those events. */
 timed csp T_Communication_WithoutDeadlines csp-begin
@@ -155,8 +154,8 @@ timed csp T_A1_C csp-begin
 T_A1_C = RUN({tock}) ||| CHAOS(TA_ExternalEvents_Communication_WithoutDeadlines)
 csp-end
 
-timed assertion T_Communication_WithoutDeadlines refines T_A1_C (Timed_TA1_C_NoDeadlines) [F]
-timed assertion T_IdealCommunication_WithoutDeadlines refines T_A1_C (Timed_TA1_C_Ideal_NoDeadlines)
+timed assertion Timed_TA1_C_NoDeadlines: T_Communication_WithoutDeadlines refines T_A1_C in the failures model
+timed assertion Timed_TA1_C_Ideal_NoDeadlines: T_IdealCommunication_WithoutDeadlines refines T_A1_C
 
 timed csp T_AggregationSoftware_WithoutDeadlines csp-begin
 TA_ExternalEvents_AggregationSoftware_WithoutDeadlines = {|AggregationSoftware_obstacle|}
@@ -178,22 +177,22 @@ timed csp T_A1_A csp-begin
 T_A1_A = RUN({tock}) ||| CHAOS(TA_ExternalEvents_AggregationSoftware_WithoutDeadlines)
 csp-end
 
-timed assertion T_AggregationSoftware_WithoutDeadlines refines T_A1_A (Timed_TA1_A_NoDeadlines) [F]
-timed assertion T_IdealAggregationSoftware_WithoutDeadlines refines T_A1_A (Timed_TA1_A_Ideal_NoDeadlines)
+timed assertion Timed_TA1_A_NoDeadlines: T_AggregationSoftware_WithoutDeadlines refines T_A1_A in the failures model
+timed assertion Timed_TA1_A_Ideal_NoDeadlines: T_IdealAggregationSoftware_WithoutDeadlines refines T_A1_A
 
 /** REACHABILITY **/
 
 /* Note: the following fails for alpha = 2 because ID is set {0,1} so it is impossible for more than two neighbours to
  * 		 accumulate, and when alpha = 2 it is impossible for that transition to be taken :-) */
-assertion Movement::Turning::Turn180 is reachable in AggregationSoftware (TA_2_Turning_Turn180)
-assertion Movement::Turning::RandomTurn is reachable in AggregationSoftware (TA_2_Turning_RandomTurn)
-assertion Movement::Turning::f1 is reachable in AggregationSoftware (TA_2_Turning_f1)
-assertion Movement::Turning is reachable in AggregationSoftware (TA_2_Turning)
-assertion Movement::MovementAndAvoidance is reachable in AggregationSoftware (TA_2_MovementAndAvoidance)
-assertion Movement::MovementAndAvoidance::Move is reachable in AggregationSoftware (TA_2_MovementAndAvoidance_Move)
-assertion Movement::MovementAndAvoidance::Avoid is reachable in AggregationSoftware (TA_2_MovementAndAvoidance_Avoid)
-assertion Communication::Broadcast is reachable in AggregationSoftware (TA_2_Communication_Broadcast)
-assertion Communication::Receive is reachable in AggregationSoftware (TA_2_Communication_Receive)
+assertion TA_2_Turning_Turn180: Movement::Turning::Turn180 is reachable in AggregationSoftware
+assertion TA_2_Turning_RandomTurn: Movement::Turning::RandomTurn is reachable in AggregationSoftware
+assertion TA_2_Turning_f1: Movement::Turning::f1 is reachable in AggregationSoftware
+assertion TA_2_Turning: Movement::Turning is reachable in AggregationSoftware
+assertion TA_2_MovementAndAvoidance: Movement::MovementAndAvoidance is reachable in AggregationSoftware
+assertion TA_2_MovementAndAvoidance_Move: Movement::MovementAndAvoidance::Move is reachable in AggregationSoftware
+assertion TA_2_MovementAndAvoidance_Avoid: Movement::MovementAndAvoidance::Avoid is reachable in AggregationSoftware
+assertion TA_2_Communication_Broadcast: Communication::Broadcast is reachable in AggregationSoftware
+assertion TA_2_Communication_Receive: Communication::Receive is reachable in AggregationSoftware
 
 /******************************************************************************
  * TB Requirements.
@@ -302,12 +301,12 @@ timed csp TB8 csp-begin
 TB8 = MovementStateSpent(360/Movement_av,"Movement_Turning")
 csp-end
 
-timed assertion T_AggregationSoftware_Communication_VS refines TB1 (Timed_TB1) [FD]
-timed assertion T_AggregationSoftware_Communication_VS refines TB2 (Timed_TB2) [FD]
-timed assertion T_AggregationSoftware_Communication_VS refines TB3 (Timed_TB3) [FD]
-timed assertion AggregationSoftware refines TB4 (Timed_TB4) [FD]
-timed assertion T_AggregationSoftware_Movement_VS refines TB5 (Timed_TB5) [FD]
-timed assertion T_AggregationSoftware_Movement_VS refines TB6 (Timed_TB6) [FD]
-timed assertion T_AggregationSoftware_Movement_VS refines TB7 (Timed_TB7) [FD]
-timed assertion T_AggregationSoftware_Movement_VS refines TB8 (Timed_TB8) [FD]
+timed assertion Timed_TB1: T_AggregationSoftware_Communication_VS refines TB1 in the failures divergences model
+timed assertion Timed_TB2: T_AggregationSoftware_Communication_VS refines TB2 in the failures divergences model
+timed assertion Timed_TB3: T_AggregationSoftware_Communication_VS refines TB3
+timed assertion Timed_TB4: AggregationSoftware refines TB4 in the failures divergences model
+timed assertion Timed_TB5: T_AggregationSoftware_Movement_VS refines TB5 in the failures divergences model
+timed assertion Timed_TB6: T_AggregationSoftware_Movement_VS refines TB6 in the failures divergences model
+timed assertion Timed_TB7: T_AggregationSoftware_Movement_VS refines TB7 in the failures divergences model
+timed assertion Timed_TB8: T_AggregationSoftware_Movement_VS refines TB8 in the failures divergences model
 
