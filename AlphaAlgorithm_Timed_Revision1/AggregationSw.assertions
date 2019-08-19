@@ -191,8 +191,8 @@ assertion TA_2_Turning: Movement::Turning is reachable in AggregationSoftware
 assertion TA_2_MovementAndAvoidance: Movement::MovementAndAvoidance is reachable in AggregationSoftware
 assertion TA_2_MovementAndAvoidance_Move: Movement::MovementAndAvoidance::Move is reachable in AggregationSoftware
 assertion TA_2_MovementAndAvoidance_Avoid: Movement::MovementAndAvoidance::Avoid is reachable in AggregationSoftware
-assertion TA_2_Communication_Broadcast: Communication::Broadcast is reachable in AggregationSoftware
-assertion TA_2_Communication_Receive: Communication::Receive is reachable in AggregationSoftware
+assertion TA_2_Communication_Broadcast: Communication::Broadcast is reachable in AggregationSoftware 
+assertion TA_2_Communication_Receive: Communication::Receive is reachable in AggregationSoftware 
 
 /******************************************************************************
  * TB Requirements.
